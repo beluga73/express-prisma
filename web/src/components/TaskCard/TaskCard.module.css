@@ -1,0 +1,24 @@
+.card {
+  max-width: 20rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+}
+
+.cardText {
+  display: flex;
+  align-items: center;
+}
+
+.cardStatus {
+  display: inline-block;
+  margin-left: 0.4rem;
+  border-radius: 9999px;
+  width: 0.6rem;
+  aspect-ratio: 1 / 1;
+}

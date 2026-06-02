@@ -1,0 +1,7 @@
+:root {
+  --my-color: rgb(84, 84, 255);
+}
+
+.dark {
+  --my-color: rgb(255, 143, 109);
+}
