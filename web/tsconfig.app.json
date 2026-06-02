@@ -18,8 +18,9 @@
     /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": false,
-    "useDefineForClassFields": true,
+    // "erasableSyntaxOnly": false,
+    "experimentalDecorators": false,
+    // "useDefineForClassFields": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
