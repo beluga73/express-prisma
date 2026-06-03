@@ -28,56 +28,70 @@ export type AggregateTasks = {
 
 export type TasksAvgAggregateOutputType = {
   id: number | null
+  position: number | null
+  columnId: number | null
 }
 
 export type TasksSumAggregateOutputType = {
   id: number | null
+  position: number | null
+  columnId: number | null
 }
 
 export type TasksMinAggregateOutputType = {
   id: number | null
   title: string | null
-  status: $Enums.Status | null
+  position: number | null
+  columnId: number | null
 }
 
 export type TasksMaxAggregateOutputType = {
   id: number | null
   title: string | null
-  status: $Enums.Status | null
+  position: number | null
+  columnId: number | null
 }
 
 export type TasksCountAggregateOutputType = {
   id: number
   title: number
-  status: number
+  position: number
+  columnId: number
   _all: number
 }
 
 
 export type TasksAvgAggregateInputType = {
   id?: true
+  position?: true
+  columnId?: true
 }
 
 export type TasksSumAggregateInputType = {
   id?: true
+  position?: true
+  columnId?: true
 }
 
 export type TasksMinAggregateInputType = {
   id?: true
   title?: true
-  status?: true
+  position?: true
+  columnId?: true
 }
 
 export type TasksMaxAggregateInputType = {
   id?: true
   title?: true
-  status?: true
+  position?: true
+  columnId?: true
 }
 
 export type TasksCountAggregateInputType = {
   id?: true
   title?: true
-  status?: true
+  position?: true
+  columnId?: true
   _all?: true
 }
 
@@ -170,7 +184,8 @@ export type TasksGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type TasksGroupByOutputType = {
   id: number
   title: string
-  status: $Enums.Status
+  position: number
+  columnId: number
   _count: TasksCountAggregateOutputType | null
   _avg: TasksAvgAggregateOutputType | null
   _sum: TasksSumAggregateOutputType | null
@@ -199,13 +214,17 @@ export type TasksWhereInput = {
   NOT?: Prisma.TasksWhereInput | Prisma.TasksWhereInput[]
   id?: Prisma.IntFilter<"Tasks"> | number
   title?: Prisma.StringFilter<"Tasks"> | string
-  status?: Prisma.EnumStatusFilter<"Tasks"> | $Enums.Status
+  position?: Prisma.IntFilter<"Tasks"> | number
+  columnId?: Prisma.IntFilter<"Tasks"> | number
+  column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }
 
 export type TasksOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
+  column?: Prisma.ColumnOrderByWithRelationInput
 }
 
 export type TasksWhereUniqueInput = Prisma.AtLeast<{
@@ -214,13 +233,16 @@ export type TasksWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TasksWhereInput[]
   NOT?: Prisma.TasksWhereInput | Prisma.TasksWhereInput[]
   title?: Prisma.StringFilter<"Tasks"> | string
-  status?: Prisma.EnumStatusFilter<"Tasks"> | $Enums.Status
+  position?: Prisma.IntFilter<"Tasks"> | number
+  columnId?: Prisma.IntFilter<"Tasks"> | number
+  column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }, "id">
 
 export type TasksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
   _count?: Prisma.TasksCountOrderByAggregateInput
   _avg?: Prisma.TasksAvgOrderByAggregateInput
   _max?: Prisma.TasksMaxOrderByAggregateInput
@@ -234,80 +256,100 @@ export type TasksScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TasksScalarWhereWithAggregatesInput | Prisma.TasksScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
   title?: Prisma.StringWithAggregatesFilter<"Tasks"> | string
-  status?: Prisma.EnumStatusWithAggregatesFilter<"Tasks"> | $Enums.Status
+  position?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
+  columnId?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
 }
 
 export type TasksCreateInput = {
   title: string
-  status?: $Enums.Status
+  position: number
+  column: Prisma.ColumnCreateNestedOneWithoutTasksInput
 }
 
 export type TasksUncheckedCreateInput = {
   id?: number
   title: string
-  status?: $Enums.Status
+  position: number
+  columnId: number
 }
 
 export type TasksUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  column?: Prisma.ColumnUpdateOneRequiredWithoutTasksNestedInput
 }
 
 export type TasksUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  columnId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TasksCreateManyInput = {
   id?: number
   title: string
-  status?: $Enums.Status
+  position: number
+  columnId: number
 }
 
 export type TasksUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  position?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TasksUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  columnId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TasksCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
 }
 
 export type TasksAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
 }
 
 export type TasksMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
 }
 
 export type TasksMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
 }
 
 export type TasksSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  columnId?: Prisma.SortOrder
+}
+
+export type TasksListRelationFilter = {
+  every?: Prisma.TasksWhereInput
+  some?: Prisma.TasksWhereInput
+  none?: Prisma.TasksWhereInput
+}
+
+export type TasksOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
-}
-
-export type EnumStatusFieldUpdateOperationsInput = {
-  set?: $Enums.Status
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -318,41 +360,172 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type TasksCreateNestedManyWithoutColumnInput = {
+  create?: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput> | Prisma.TasksCreateWithoutColumnInput[] | Prisma.TasksUncheckedCreateWithoutColumnInput[]
+  connectOrCreate?: Prisma.TasksCreateOrConnectWithoutColumnInput | Prisma.TasksCreateOrConnectWithoutColumnInput[]
+  createMany?: Prisma.TasksCreateManyColumnInputEnvelope
+  connect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+}
+
+export type TasksUncheckedCreateNestedManyWithoutColumnInput = {
+  create?: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput> | Prisma.TasksCreateWithoutColumnInput[] | Prisma.TasksUncheckedCreateWithoutColumnInput[]
+  connectOrCreate?: Prisma.TasksCreateOrConnectWithoutColumnInput | Prisma.TasksCreateOrConnectWithoutColumnInput[]
+  createMany?: Prisma.TasksCreateManyColumnInputEnvelope
+  connect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+}
+
+export type TasksUpdateManyWithoutColumnNestedInput = {
+  create?: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput> | Prisma.TasksCreateWithoutColumnInput[] | Prisma.TasksUncheckedCreateWithoutColumnInput[]
+  connectOrCreate?: Prisma.TasksCreateOrConnectWithoutColumnInput | Prisma.TasksCreateOrConnectWithoutColumnInput[]
+  upsert?: Prisma.TasksUpsertWithWhereUniqueWithoutColumnInput | Prisma.TasksUpsertWithWhereUniqueWithoutColumnInput[]
+  createMany?: Prisma.TasksCreateManyColumnInputEnvelope
+  set?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  disconnect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  delete?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  connect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  update?: Prisma.TasksUpdateWithWhereUniqueWithoutColumnInput | Prisma.TasksUpdateWithWhereUniqueWithoutColumnInput[]
+  updateMany?: Prisma.TasksUpdateManyWithWhereWithoutColumnInput | Prisma.TasksUpdateManyWithWhereWithoutColumnInput[]
+  deleteMany?: Prisma.TasksScalarWhereInput | Prisma.TasksScalarWhereInput[]
+}
+
+export type TasksUncheckedUpdateManyWithoutColumnNestedInput = {
+  create?: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput> | Prisma.TasksCreateWithoutColumnInput[] | Prisma.TasksUncheckedCreateWithoutColumnInput[]
+  connectOrCreate?: Prisma.TasksCreateOrConnectWithoutColumnInput | Prisma.TasksCreateOrConnectWithoutColumnInput[]
+  upsert?: Prisma.TasksUpsertWithWhereUniqueWithoutColumnInput | Prisma.TasksUpsertWithWhereUniqueWithoutColumnInput[]
+  createMany?: Prisma.TasksCreateManyColumnInputEnvelope
+  set?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  disconnect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  delete?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  connect?: Prisma.TasksWhereUniqueInput | Prisma.TasksWhereUniqueInput[]
+  update?: Prisma.TasksUpdateWithWhereUniqueWithoutColumnInput | Prisma.TasksUpdateWithWhereUniqueWithoutColumnInput[]
+  updateMany?: Prisma.TasksUpdateManyWithWhereWithoutColumnInput | Prisma.TasksUpdateManyWithWhereWithoutColumnInput[]
+  deleteMany?: Prisma.TasksScalarWhereInput | Prisma.TasksScalarWhereInput[]
+}
+
+export type TasksCreateWithoutColumnInput = {
+  title: string
+  position: number
+}
+
+export type TasksUncheckedCreateWithoutColumnInput = {
+  id?: number
+  title: string
+  position: number
+}
+
+export type TasksCreateOrConnectWithoutColumnInput = {
+  where: Prisma.TasksWhereUniqueInput
+  create: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput>
+}
+
+export type TasksCreateManyColumnInputEnvelope = {
+  data: Prisma.TasksCreateManyColumnInput | Prisma.TasksCreateManyColumnInput[]
+  skipDuplicates?: boolean
+}
+
+export type TasksUpsertWithWhereUniqueWithoutColumnInput = {
+  where: Prisma.TasksWhereUniqueInput
+  update: Prisma.XOR<Prisma.TasksUpdateWithoutColumnInput, Prisma.TasksUncheckedUpdateWithoutColumnInput>
+  create: Prisma.XOR<Prisma.TasksCreateWithoutColumnInput, Prisma.TasksUncheckedCreateWithoutColumnInput>
+}
+
+export type TasksUpdateWithWhereUniqueWithoutColumnInput = {
+  where: Prisma.TasksWhereUniqueInput
+  data: Prisma.XOR<Prisma.TasksUpdateWithoutColumnInput, Prisma.TasksUncheckedUpdateWithoutColumnInput>
+}
+
+export type TasksUpdateManyWithWhereWithoutColumnInput = {
+  where: Prisma.TasksScalarWhereInput
+  data: Prisma.XOR<Prisma.TasksUpdateManyMutationInput, Prisma.TasksUncheckedUpdateManyWithoutColumnInput>
+}
+
+export type TasksScalarWhereInput = {
+  AND?: Prisma.TasksScalarWhereInput | Prisma.TasksScalarWhereInput[]
+  OR?: Prisma.TasksScalarWhereInput[]
+  NOT?: Prisma.TasksScalarWhereInput | Prisma.TasksScalarWhereInput[]
+  id?: Prisma.IntFilter<"Tasks"> | number
+  title?: Prisma.StringFilter<"Tasks"> | string
+  position?: Prisma.IntFilter<"Tasks"> | number
+  columnId?: Prisma.IntFilter<"Tasks"> | number
+}
+
+export type TasksCreateManyColumnInput = {
+  id?: number
+  title: string
+  position: number
+}
+
+export type TasksUpdateWithoutColumnInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type TasksUncheckedUpdateWithoutColumnInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type TasksUncheckedUpdateManyWithoutColumnInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
 
 
 export type TasksSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  status?: boolean
+  position?: boolean
+  columnId?: boolean
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tasks"]>
 
 export type TasksSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  status?: boolean
+  position?: boolean
+  columnId?: boolean
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tasks"]>
 
 export type TasksSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  status?: boolean
+  position?: boolean
+  columnId?: boolean
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tasks"]>
 
 export type TasksSelectScalar = {
   id?: boolean
   title?: boolean
-  status?: boolean
+  position?: boolean
+  columnId?: boolean
 }
 
-export type TasksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "status", ExtArgs["result"]["tasks"]>
+export type TasksOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "position" | "columnId", ExtArgs["result"]["tasks"]>
+export type TasksInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
+}
+export type TasksIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
+}
+export type TasksIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  column?: boolean | Prisma.ColumnDefaultArgs<ExtArgs>
+}
 
 export type $TasksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Tasks"
-  objects: {}
+  objects: {
+    column: Prisma.$ColumnPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
-    status: $Enums.Status
+    position: number
+    columnId: number
   }, ExtArgs["result"]["tasks"]>
   composites: {}
 }
@@ -747,6 +920,7 @@ readonly fields: TasksFieldRefs;
  */
 export interface Prisma__TasksClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  column<T extends Prisma.ColumnDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ColumnDefaultArgs<ExtArgs>>): Prisma.Prisma__ColumnClient<runtime.Types.Result.GetResult<Prisma.$ColumnPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -778,7 +952,8 @@ export interface Prisma__TasksClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface TasksFieldRefs {
   readonly id: Prisma.FieldRef<"Tasks", 'Int'>
   readonly title: Prisma.FieldRef<"Tasks", 'String'>
-  readonly status: Prisma.FieldRef<"Tasks", 'Status'>
+  readonly position: Prisma.FieldRef<"Tasks", 'Int'>
+  readonly columnId: Prisma.FieldRef<"Tasks", 'Int'>
 }
     
 
@@ -795,6 +970,10 @@ export type TasksFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * Filter, which Tasks to fetch.
    */
@@ -814,6 +993,10 @@ export type TasksFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
+  /**
    * Filter, which Tasks to fetch.
    */
   where: Prisma.TasksWhereUniqueInput
@@ -831,6 +1014,10 @@ export type TasksFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * Filter, which Tasks to fetch.
    */
@@ -880,6 +1067,10 @@ export type TasksFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
+  /**
    * Filter, which Tasks to fetch.
    */
   where?: Prisma.TasksWhereInput
@@ -927,6 +1118,10 @@ export type TasksFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * Filter, which Tasks to fetch.
    */
@@ -976,6 +1171,10 @@ export type TasksCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
+  /**
    * The data needed to create a Tasks.
    */
   data: Prisma.XOR<Prisma.TasksCreateInput, Prisma.TasksUncheckedCreateInput>
@@ -1009,6 +1208,10 @@ export type TasksCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.TasksCreateManyInput | Prisma.TasksCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1023,6 +1226,10 @@ export type TasksUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * The data needed to update a Tasks.
    */
@@ -1075,6 +1282,10 @@ export type TasksUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Tasks to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1089,6 +1300,10 @@ export type TasksUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * The filter to search for the Tasks to update in case it exists.
    */
@@ -1115,6 +1330,10 @@ export type TasksDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
   /**
    * Filter which Tasks to delete.
    */
@@ -1147,4 +1366,8 @@ export type TasksDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Tasks
    */
   omit?: Prisma.TasksOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TasksInclude<ExtArgs> | null
 }

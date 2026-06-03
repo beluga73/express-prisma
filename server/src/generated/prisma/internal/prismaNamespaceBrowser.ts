@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Tasks: 'Tasks'
+  Tasks: 'Tasks',
+  Column: 'Column'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -73,10 +74,20 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const TasksScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  status: 'status'
+  position: 'position',
+  columnId: 'columnId'
 } as const
 
 export type TasksScalarFieldEnum = (typeof TasksScalarFieldEnum)[keyof typeof TasksScalarFieldEnum]
+
+
+export const ColumnScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  position: 'position'
+} as const
+
+export type ColumnScalarFieldEnum = (typeof ColumnScalarFieldEnum)[keyof typeof ColumnScalarFieldEnum]
 
 
 export const SortOrder = {

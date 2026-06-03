@@ -7,14 +7,17 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Status {
-  TODO
-  IN_PROGRESS
-  DONE
+model Tasks {
+  id       Int    @id @default(autoincrement())
+  title    String
+  position Int
+  columnId Int
+  column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
 }
 
-model Tasks {
-  id     Int    @id @default(autoincrement())
-  title  String
-  status Status @default(TODO)
+model Column {
+  id       Int     @id @default(autoincrement())
+  title    String
+  position Int
+  tasks    Tasks[]
 }

@@ -46,3 +46,8 @@ export { Prisma }
  * 
  */
 export type Tasks = Prisma.TasksModel
+/**
+ * Model Column
+ * 
+ */
+export type Column = Prisma.ColumnModel
