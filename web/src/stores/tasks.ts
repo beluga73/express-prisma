@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action, observable, runInAction } from "mobx";
 import type { Task } from "../types";
 
 export class TasksStore {
@@ -8,13 +8,13 @@ export class TasksStore {
 
   constructor() {}
 
-  @action setFetchResults(data: Task[] | null, error: Error | null) {
+  @action.bound setFetchResults(data: Task[] | null, error: Error | null) {
     if (data) this.data = data;
     this.isLoading = false;
     this.error = error;
   }
 
-  @action async fetchTasks() {
+  @action.bound async fetchTasks() {
     this.isLoading = true;
     this.error = null;
 
@@ -28,7 +28,20 @@ export class TasksStore {
     }
   }
 
-  @action addTask(title: string) {
-    // implement
+  async addTask(title: string) {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+      const data = await res.json();
+      runInAction(() => (this.data = data));
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error("Unknown Error");
+      runInAction(() => (this.error = error));
+    }
   }
 }

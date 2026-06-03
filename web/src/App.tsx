@@ -15,6 +15,10 @@ const App = observer(() => {
     fetchTasks();
   }, [fetchTasks]);
 
+  const handleSubmit = () => {
+    addTask(value);
+  };
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -25,14 +29,14 @@ const App = observer(() => {
 
   return (
     <div className={styles.tasks}>
-      <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <button onClick={() => addTask(value)}>add</button>
-      </div>
+        <button>add</button>
+      </form>
       {tasks.map((task) => (
         <TaskCard {...task} key={task.id} />
       ))}

@@ -4,13 +4,15 @@ import babel from "vite-plugin-babel";
 
 export default defineConfig({
   plugins: [
-    react(),
     babel({
+      include: /\.ts$/,
       babelConfig: {
+        presets: [["@babel/preset-typescript"]],
         plugins: [
           ["@babel/plugin-proposal-decorators", { version: "2023-11" }],
         ],
       },
     }),
+    react(),
   ],
 });
