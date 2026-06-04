@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { taskService } from "../services/task.service.js";
+import { createTaskSchema } from "../schemas/task.schema.js";
 
 const router = Router();
 
@@ -19,15 +20,16 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title } = req.body;
+  const { success, data, error } = createTaskSchema.safeParse(req.body);
 
-  if (!title) {
-    return res.status(400).send({ error: "please include title property" });
+  if (!success) {
+    console.log(error);
+    return res.status(400).send({ errors: error.issues });
   }
 
-  const newTask = await taskService.create({ title });
+  const newTask = await taskService.create({ ...data });
 
-  res.status(201).json(newTask);
+  res.status(201).json({ ...newTask });
 });
 
 export { router };

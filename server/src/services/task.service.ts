@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import type { CreateTask } from "../schemas/task.schema.js";
 
 export const taskService = {
   async getAll() {
@@ -9,7 +10,7 @@ export const taskService = {
       where: { id },
     });
   },
-  async create(data: { title: string }) {
+  async create(data: CreateTask) {
     return await prisma.tasks.create({ data });
   },
 };

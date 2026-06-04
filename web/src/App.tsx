@@ -27,6 +27,24 @@ const App = observer(() => {
     return <p style={{ backgroundColor: "red" }}>{error.message}</p>;
   }
 
+  useEffect(() => {
+    const createTodo = async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "my new todo number 2 ",
+          columnId: 1,
+          position: "sd",
+        }),
+      });
+      const data = await res.json();
+      console.log(data.errors);
+    };
+
+    createTodo();
+  }, []);
+
   return (
     <div className={styles.tasks}>
       <form onSubmit={handleSubmit}>
