@@ -5,61 +5,7 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 
 const App = observer(() => {
-  const [value, setValue] = useState("");
-
-  const {
-    tasksStore: { data: tasks, isLoading, error, fetchTasks, addTask },
-  } = useStores();
-
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
-
-  const handleSubmit = () => {
-    addTask(value);
-  };
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p style={{ backgroundColor: "red" }}>{error.message}</p>;
-  }
-
-  useEffect(() => {
-    const createTodo = async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: "my new todo number 2 ",
-          columnId: 1,
-          position: "sd",
-        }),
-      });
-      const data = await res.json();
-      console.log(data.errors);
-    };
-
-    createTodo();
-  }, []);
-
-  return (
-    <div className={styles.tasks}>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <button>add</button>
-      </form>
-      {tasks.map((task) => (
-        <TaskCard {...task} key={task.id} />
-      ))}
-    </div>
-  );
+  return <div>hello</div>;
 });
 
 export default App;

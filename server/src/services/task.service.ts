@@ -3,7 +3,14 @@ import type { CreateTask } from "../schemas/task.schema.js";
 
 export const taskService = {
   async getAll() {
-    return await prisma.tasks.findMany();
+    return await prisma.column.findMany({
+      orderBy: { position: "asc" },
+      include: {
+        tasks: {
+          orderBy: { position: "asc" },
+        },
+      },
+    });
   },
   async getById(id: number) {
     return await prisma.tasks.findUnique({
