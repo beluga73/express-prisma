@@ -3,8 +3,16 @@ import styles from "./App.module.css";
 import { useStores } from "./stores/rootContext";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
+import { api } from "@/services/api";
 
 const App = observer(() => {
+  useEffect(() => {
+    // const fn = async () => {
+    //   const data = await api.POST('/tasks', { body: { title: 'title', position: 0, }})
+    //   console.log(res);
+    // };
+    // fn();
+  });
   return <div>hello</div>;
 });
 

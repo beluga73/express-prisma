@@ -1,20 +1,12 @@
 import { Router } from "express";
-import { taskService } from "../services/task.service.js";
-import { createTaskSchema } from "../schemas/task.schema.js";
-import { idParamSchema } from "../schemas/common.schema.js";
+import { taskService } from "@/services/task.service.js";
+import { createTaskSchema } from "@/schemas/task.schema.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   const allTasks = await taskService.getAll();
   res.json(allTasks);
-});
-
-// I think it's useless & can possible be removed
-router.get("/:id", async (req, res) => {
-  const { id } = idParamSchema.parse(req.params);
-  const task = await taskService.getById(id);
-  res.json(task);
 });
 
 router.post("/", async (req, res) => {

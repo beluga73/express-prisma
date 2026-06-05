@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "ts-check": "tsc --noEmit"
+    "ts-check": "tsc --noEmit",
+    "gen-types": "dotenv -e .env -- sh -c 'openapi-typescript $VITE_API_URL/docs.json -o ./src/types/api.ts'"
   },
   "dependencies": {
     "@dnd-kit/react": "^0.4.0",
@@ -17,6 +18,7 @@
     "mobx": "^6.15.4",
     "mobx-react-lite": "^4.1.1",
     "npm": "^11.16.0",
+    "openapi-fetch": "^0.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },
@@ -28,10 +30,12 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "openapi-typescript": "^7.13.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
