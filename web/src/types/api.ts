@@ -11,6 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Get all tasks */
         get: {
             parameters: {
                 query?: never;
@@ -30,15 +31,32 @@ export interface paths {
                             id: number;
                             title: string;
                             position: number;
-                            tasks: (components["schemas"]["Task"] & {
+                            tasks: {
                                 id: number;
-                            })[];
+                                title: string;
+                                position: number;
+                                columnId: number;
+                            }[];
                         }[];
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
                     };
                 };
             };
         };
         put?: never;
+        /** Create a task */
         post: {
             parameters: {
                 query?: never;
@@ -46,6 +64,7 @@ export interface paths {
                 path?: never;
                 cookie?: never;
             };
+            /** @description Task data to create */
             requestBody?: {
                 content: {
                     /**
@@ -55,7 +74,12 @@ export interface paths {
                      *       "columnId": 1
                      *     }
                      */
-                    "application/json": components["schemas"]["Task"];
+                    "application/json": {
+                        id: number;
+                        title: string;
+                        position: number;
+                        columnId: number;
+                    };
                 };
             };
             responses: {
@@ -64,7 +88,50 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        /**
+                         * @example {
+                         *       "id": 1,
+                         *       "title": "Fix login bug",
+                         *       "position": 0,
+                         *       "columnId": 1
+                         *     }
+                         */
+                        "application/json": {
+                            id: number;
+                            title: string;
+                            position: number;
+                            columnId: number;
+                        };
+                    };
+                };
+                /** @description Invalid request body */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                code: string;
+                                message: string;
+                                path?: (string | number)[];
+                            }[];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
+                    };
                 };
             };
         };
@@ -74,16 +141,179 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tasks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete a task */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Task deleted successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "id": 1,
+                         *       "title": "Fix login bug",
+                         *       "position": 0,
+                         *       "columnId": 1
+                         *     }
+                         */
+                        "application/json": {
+                            id: number;
+                            title: string;
+                            position: number;
+                            columnId: number;
+                        };
+                    };
+                };
+                /** @description Resource not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /** Update a task */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            /** @description Fields to update */
+            requestBody?: {
+                content: {
+                    /**
+                     * @example {
+                     *       "title": "Updated title",
+                     *       "position": 5,
+                     *       "columnId": 2
+                     *     }
+                     */
+                    "application/json": {
+                        title?: string;
+                        position?: number;
+                        columnId?: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description Task updated successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "id": 1,
+                         *       "title": "Updated title",
+                         *       "position": 5,
+                         *       "columnId": 2
+                         *     }
+                         */
+                        "application/json": {
+                            id: number;
+                            title: string;
+                            position: number;
+                            columnId: number;
+                        };
+                    };
+                };
+                /** @description Invalid request body */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                code: string;
+                                message: string;
+                                path?: (string | number)[];
+                            }[];
+                        };
+                    };
+                };
+                /** @description Resource not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            errors: {
+                                message: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        Task: {
-            title: string;
-            position: number | null;
-            columnId: number;
-        };
-    };
+    schemas: never;
     responses: never;
     parameters: never;
     requestBodies: never;

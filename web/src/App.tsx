@@ -1,19 +1,29 @@
-import { TaskCard } from "./components/TaskCard/TaskCard";
-import styles from "./App.module.css";
-import { useStores } from "./stores/rootContext";
-import { useEffect, useState } from "react";
+import { Box, Button } from "@mui/material";
+import { useStores } from "./stores/StoresContext";
+import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { api } from "@/services/api";
+import { useTheme } from "@/theme/ThemeContext";
+import { api } from "./services/api";
 
 const App = observer(() => {
+  const { toggleTheme, mode } = useTheme();
+
   useEffect(() => {
-    // const fn = async () => {
-    //   const data = await api.POST('/tasks', { body: { title: 'title', position: 0, }})
-    //   console.log(res);
-    // };
-    // fn();
+    const fn = async () => {
+      const data = await api.GET("/tasks");
+      console.log(data);
+    };
+    fn();
   });
-  return <div>hello</div>;
+
+  return (
+    <Box sx={{ display: "flex", gap: 1 }}>
+      {/* columns will go here */}
+      <Button variant="outlined" onClick={toggleTheme}>
+        Toggle {mode === "light" ? "Dark" : "Light"}
+      </Button>
+    </Box>
+  );
 });
 
 export default App;
