@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma";
-import type { CreateTask } from "../schemas/task.schema";
+import type { CreateTaskRequest } from "../schemas/task.schema";
 
 export const taskService = {
   async getAll() {
@@ -12,12 +12,7 @@ export const taskService = {
       },
     });
   },
-  async getById(id: number) {
-    return await prisma.tasks.findUnique({
-      where: { id },
-    });
-  },
-  async create(data: CreateTask) {
+  async create(data: CreateTaskRequest) {
     return await prisma.tasks.create({ data });
   },
 };

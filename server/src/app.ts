@@ -1,4 +1,4 @@
-import "@/lib/zod";
+import "@/lib/zod-openapi";
 import express from "express";
 import cors from "cors";
 import { taskRouter } from "./routes";

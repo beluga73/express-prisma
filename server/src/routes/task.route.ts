@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { taskService } from "@/services/task.service";
-import { createTaskSchema } from "@/schemas/task.schema";
+import { CreateTaskRequestSchema } from "@/schemas/task.schema";
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const data = createTaskSchema.parse(req.body);
+  const data = CreateTaskRequestSchema.parse(req.body);
   const newTask = await taskService.create(data);
   res.status(201).json(newTask);
 });

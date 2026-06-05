@@ -1,10 +1,10 @@
+import { TasksSchema, ColumnSchema } from "@/generated/zod";
 import z from "zod";
 
-export const createTaskSchema = z
-  .object({
-    title: z.string().min(3).max(50),
-    position: z.coerce.number().int().nonnegative(),
-    columnId: z.coerce.number().int().positive(),
-  })
-  .openapi("Task");
-export type CreateTask = z.infer<typeof createTaskSchema>;
+export const GetTasksResponseSchema = ColumnSchema.extend({
+  tasks: z.array(TasksSchema),
+});
+
+export const CreateTaskRequestSchema = TasksSchema.omit({ id: true });
+export type CreateTaskRequest = z.output<typeof CreateTaskRequestSchema>;
+export const CreateTaskResponseSchema = TasksSchema;

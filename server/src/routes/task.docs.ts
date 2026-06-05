@@ -1,37 +1,21 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { createTaskSchema } from "../schemas/task.schema";
-import z from "zod";
-
-/**
- * This is horrible, you have to generate schema from prisma tables
- * and then create Request & Reponse schema from them
- */
-
-const taskResponseSchema = createTaskSchema.extend({
-  id: z.number(),
-});
-
-const boardResponseSchema = z.array(
-  z.object({
-    id: z.number(),
-    title: z.string(),
-    position: z.number(),
-    tasks: z.array(taskResponseSchema),
-  }),
-);
+import {
+  GetTasksResponseSchema,
+  CreateTaskResponseSchema,
+} from "@/schemas/task.schema";
 
 export const registerTaskDocs = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: "get",
     path: "/tasks",
-    // summary: "get all tasks",
+    summary: "Get all tasks",
     request: {},
     responses: {
       200: {
         description: "Returns all tasks",
         content: {
           "application/json": {
-            schema: boardResponseSchema,
+            schema: GetTasksResponseSchema,
           },
         },
       },
@@ -40,11 +24,12 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: "post",
     path: "/tasks",
+    summary: "Create a task",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: createTaskSchema,
+            schema: CreateTaskResponseSchema,
             example: {
               title: "Fix login bug",
               position: 0,
@@ -55,7 +40,20 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
       },
     },
     responses: {
-      201: { description: "Task created successfully" },
+      201: {
+        description: "Task created successfully",
+        content: {
+          "application/json": {
+            schema: CreateTaskResponseSchema,
+            example: {
+              id: 1,
+              title: "Fix login bug",
+              position: 0,
+              columnId: 1,
+            },
+          },
+        },
+      },
     },
   });
 };
