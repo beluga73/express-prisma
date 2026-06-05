@@ -12,7 +12,7 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "./prismaNamespace.js"
+import type * as Prisma from "./prismaNamespace"
 
 
 const config: runtime.GetPrismaClientConfig = {
@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Tasks {\n  id       Int    @id @default(autoincrement())\n  title    String\n  position Int\n  columnId Int\n  column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)\n}\n\nmodel Column {\n  id       Int     @id @default(autoincrement())\n  title    String\n  position Int\n  tasks    Tasks[]\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\ngenerator zod {\n  provider         = \"zod-prisma-types\"\n  output           = \"../src/generated/zod\"\n  useMultipleFiles = false // Bundles everything into one file for easy importing\n  prismaClientPath = \"@/generated/prisma\"\n}\n\nmodel Tasks {\n  id       Int    @id @default(autoincrement())\n  title    String\n  position Int\n  columnId Int\n  column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)\n}\n\nmodel Column {\n  id       Int     @id @default(autoincrement())\n  title    String\n  position Int\n  tasks    Tasks[]\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},

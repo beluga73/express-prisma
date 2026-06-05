@@ -1,10 +1,10 @@
-import "@/lib/zod.js";
+import "@/lib/zod";
 import express from "express";
 import cors from "cors";
-import { taskRouter } from "./routes/index.js";
-import { errorHandler } from "./middlewares/error.middleware.js";
+import { taskRouter } from "./routes";
+import { errorHandler } from "./middlewares/error.middleware";
 import swaggerUi from "swagger-ui-express";
-import { getOpenApiDocumentation } from "./openapi.js";
+import { getOpenApiDocumentation } from "./openapi";
 
 const app = express();
 

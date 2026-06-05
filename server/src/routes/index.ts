@@ -1,1 +1,1 @@
-export { router as taskRouter } from "./task.route.js";
+export { router as taskRouter } from "./task.route";

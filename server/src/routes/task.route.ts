@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { taskService } from "@/services/task.service.js";
-import { createTaskSchema } from "@/schemas/task.schema.js";
+import { taskService } from "@/services/task.service";
+import { createTaskSchema } from "@/schemas/task.schema";
 
 const router = Router();
 

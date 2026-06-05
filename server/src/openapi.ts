@@ -2,7 +2,7 @@ import {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
 } from "@asteasolutions/zod-to-openapi";
-import { registerTaskDocs } from "./routes/task.docs.js";
+import { registerTaskDocs } from "./routes/task.docs";
 
 export const registry = new OpenAPIRegistry();
 

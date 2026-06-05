@@ -1,5 +1,5 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { createTaskSchema } from "../schemas/task.schema.js";
+import { createTaskSchema } from "../schemas/task.schema";
 import z from "zod";
 
 /**

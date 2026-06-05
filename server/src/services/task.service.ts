@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma.js";
-import type { CreateTask } from "../schemas/task.schema.js";
+import { prisma } from "../lib/prisma";
+import type { CreateTask } from "../schemas/task.schema";
 
 export const taskService = {
   async getAll() {

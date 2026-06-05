@@ -7,6 +7,13 @@ datasource db {
   provider = "postgresql"
 }
 
+generator zod {
+  provider         = "zod-prisma-types"
+  output           = "../src/generated/zod"
+  useMultipleFiles = false // Bundles everything into one file for easy importing
+  prismaClientPath = "@/generated/prisma"
+}
+
 model Tasks {
   id       Int    @id @default(autoincrement())
   title    String
