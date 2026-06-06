@@ -19,6 +19,8 @@ export type CreateTaskRequest = z.output<typeof CreateTaskRequestSchema>;
 export const CreateTaskResponseSchema = TasksSchema;
 
 export const ValidationErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
   errors: z.array(z.object({
     code: z.string(),
     message: z.string(),
@@ -26,8 +28,7 @@ export const ValidationErrorSchema = z.object({
   })),
 });
 
-export const GenericErrorSchema = z.object({
-  errors: z.array(z.object({
-    message: z.string(),
-  })),
+export const ErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
 });

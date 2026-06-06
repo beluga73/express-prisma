@@ -1,4 +1,4 @@
-import { GenericErrorSchema, ValidationErrorSchema } from "@/schemas/task.schema";
+import { ErrorSchema, ValidationErrorSchema } from "@/schemas/task.schema";
 
 export const VALIDATION_ERROR = {
   400: {
@@ -16,7 +16,7 @@ export const NOT_FOUND_ERROR = {
     description: "Resource not found",
     content: {
       "application/json": {
-        schema: GenericErrorSchema,
+        schema: ErrorSchema,
       },
     },
   },
@@ -27,7 +27,7 @@ export const INTERNAL_SERVER_ERROR = {
     description: "Internal server error",
     content: {
       "application/json": {
-        schema: GenericErrorSchema,
+        schema: ErrorSchema,
       },
     },
   },

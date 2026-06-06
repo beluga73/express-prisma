@@ -1,5 +1,12 @@
 import { ZodError } from "zod";
+import { Prisma } from "../generated/prisma/client";
 import type { NextFunction, Request, Response } from "express";
+import { AppError, API_ERRORS, type ApiErrorCode } from "@/lib/errors";
+
+const PRISMA_ERROR_MAP: Record<string, ApiErrorCode> = {
+  P2025: "TASK_NOT_FOUND", // Record not found
+  // P2002: "DUPLICATE_ENTRY", // Unique constraint violation (add as needed)
+};
 
 export const errorHandler = (
   err: any,
@@ -10,11 +17,36 @@ export const errorHandler = (
   if (res.headersSent) return next(err);
 
   if (err instanceof ZodError) {
-    return res.status(400).json({ errors: err.issues });
+    const apiError = API_ERRORS.INVALID_REQUEST;
+    return res.status(apiError.status).json({
+      code: apiError.code,
+      message: apiError.message,
+      errors: err.issues,
+    });
+  }
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    const errorKey = PRISMA_ERROR_MAP[err.code];
+    if (errorKey) {
+      const apiError = API_ERRORS[errorKey];
+      return res.status(apiError.status).json({
+        code: apiError.code,
+        message: apiError.message,
+      });
+    }
+  }
+
+  if (err instanceof AppError) {
+    return res.status(err.status).json({
+      code: err.code,
+      message: err.message,
+    });
   }
 
   console.error(err);
-  res.status(err.status ?? 500).json({
-    errors: [{ message: err.message ?? "Internal server error" }],
+  const serverError = API_ERRORS.INTERNAL_SERVER_ERROR;
+  res.status(500).json({
+    code: serverError.code,
+    message: serverError.message,
   });
 };
