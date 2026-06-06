@@ -25,7 +25,8 @@
     "npm": "^11.16.0",
     "openapi-fetch": "^0.17.0",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-router": "^7.17.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.29.7",

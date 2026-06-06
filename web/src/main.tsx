@@ -1,9 +1,10 @@
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
+import Home from "@/routes/home";
 import { RootStore } from "./stores/RootStore";
 import { StoresContext } from "./stores/StoresContext";
 import { ThemeProvider } from "@/theme/ThemeContext";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 // eslint-disable-next-line react-refresh/only-export-components
 function Main() {
@@ -13,7 +14,11 @@ function Main() {
     <StrictMode>
       <ThemeProvider>
         <StoresContext value={rootStore.getStores()}>
-          <App />
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<Home />} />
+            </Routes>
+          </BrowserRouter>
         </StoresContext>
       </ThemeProvider>
     </StrictMode>

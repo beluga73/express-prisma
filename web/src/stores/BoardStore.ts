@@ -5,12 +5,14 @@ import type {
   CreateTaskRequest,
   GetTasksResponse,
   TaskId,
+  UpdateTaskRequest,
 } from "@/types/schema";
 
 export class BoardStore {
   tasks: GetTasksResponse = [];
   getAllState = new RequestState();
   createState = new RequestState();
+  updateState = new RequestState();
 
   constructor() {
     makeAutoObservable(this);
@@ -43,5 +45,32 @@ export class BoardStore {
 
   async createTask(task: CreateTaskRequest) {
     this.createState.run(() => this.apiCreateTask(task));
+  }
+
+  async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
+    const oldTask = this.tasks
+      .flatMap((col) => col.tasks)
+      .find((_task) => _task.id === id)!;
+    const oldTaskCopy = { ...oldTask };
+
+    Object.assign(oldTask, task);
+
+    const { data, error } = await api.PATCH("/tasks/{id}", {
+      params: {
+        path: { id },
+      },
+      body: task,
+    });
+
+    if (error) {
+      runInAction(() => Object.assign(oldTask, oldTaskCopy));
+      return error;
+    } else {
+      runInAction(() => Object.assign(oldTask, data));
+    }
+  }
+
+  async updateTask(id: TaskId, task: UpdateTaskRequest) {
+    this.updateState.run(() => this.apiUpdateTask(id, task));
   }
 }

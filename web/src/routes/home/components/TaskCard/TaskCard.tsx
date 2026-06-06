@@ -1,12 +1,15 @@
 import { useDraggable } from "@dnd-kit/react";
 import { Card, Typography } from "@mui/material";
 import type { Task } from "@/types/schema";
+import { observer } from "mobx-react-lite";
 
 type Props = {
   task: Task;
 };
 
-export const TaskCard = ({ task }: Props) => {
+// Apprantely 'observer' is needed here when we update the task paritally, as the column won't re-render
+// check it by swapping removing 'observer'
+export const TaskCard = observer(({ task }: Props) => {
   const { handleRef, isDragging } = useDraggable({ id: task.id, data: task });
 
   return (
@@ -24,4 +27,4 @@ export const TaskCard = ({ task }: Props) => {
       <Typography variant="body2">{task.title}</Typography>
     </Card>
   );
-};
+});
