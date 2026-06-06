@@ -31,3 +31,12 @@ export type DeleteTaskResponse = Exclude<
 
 // Component schemas
 export type Task = components["schemas"]["Task"];
+export type Column = GetTasksResponse[number];
+
+// Params
+export type TaskId = paths["/tasks/{id}"]["patch"]["parameters"]["path"]["id"];
+
+// Errors
+export type ApiGenericError = paths["/tasks"]["get"]["responses"]["500"]["content"]["application/json"];
+export type ApiValidationError = paths["/tasks"]["post"]["responses"]["400"]["content"]["application/json"];
+export type ApiError = ApiGenericError | ApiValidationError;

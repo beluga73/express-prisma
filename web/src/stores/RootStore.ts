@@ -1,15 +1,11 @@
-import { TasksStore } from "./tasks";
+import { BoardStore } from "./BoardStore";
 
 export class RootStore {
-  tasksStore: TasksStore;
-
-  constructor() {
-    this.tasksStore = new TasksStore();
-  }
+  BoardStore = new BoardStore();
 
   getStores() {
     return {
-      tasksStore: this.tasksStore,
+      BoardStore: this.BoardStore,
     };
   }
 }

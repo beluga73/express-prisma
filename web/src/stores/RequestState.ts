@@ -1,23 +1,25 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import type { ApiError } from "@/types/schema";
 
 export class RequestState {
   loading = false;
-  error: string | null = "";
+  error: ApiError | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async run(asyncFn: () => Promise<void>) {
+  async run(asyncFn: () => Promise<ApiError | undefined>) {
     this.loading = true;
     this.error = null;
 
     try {
-      await asyncFn();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err instanceof Error ? err.message : "An error occurred";
-      });
+      const error = await asyncFn();
+      if (error) {
+        runInAction(() => (this.error = error));
+      }
+    } catch {
+      runInAction(() => (this.error = { code: "NETWORK_ERROR", message: "Network connection failed" }));
     } finally {
       runInAction(() => (this.loading = false));
     }

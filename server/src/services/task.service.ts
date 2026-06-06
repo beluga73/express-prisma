@@ -17,7 +17,21 @@ export const taskService = {
     });
   },
   async create(data: CreateTaskRequest) {
-    return await prisma.tasks.create({ data });
+    const lastTaskInColumn = await prisma.tasks.findFirst({
+      where: { columnId: data.columnId },
+      orderBy: {
+        position: "desc",
+      },
+    });
+
+    const position = lastTaskInColumn ? lastTaskInColumn.position + 1 : 0;
+
+    return await prisma.tasks.create({
+      data: {
+        ...data,
+        position,
+      },
+    });
   },
   async update(id: TaskParams["id"], data: UpdateTasksResponse) {
     return await prisma.tasks.update({

@@ -1,6 +1,7 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import {
   GetTasksResponseSchema,
+  CreateTaskRequestSchema,
   CreateTaskResponseSchema,
   UpdateTaskRequestSchema,
   TaskParamsSchema,
@@ -9,7 +10,7 @@ import {
   VALIDATION_ERROR,
   NOT_FOUND_ERROR,
   INTERNAL_SERVER_ERROR,
-} from "./common.docs";
+} from "../common.docs";
 
 export const registerTaskDocs = (registry: OpenAPIRegistry) => {
   registry.registerPath({
@@ -38,10 +39,9 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
         description: "Task data to create",
         content: {
           "application/json": {
-            schema: CreateTaskResponseSchema,
+            schema: CreateTaskRequestSchema,
             example: {
               title: "Fix login bug",
-              position: 0,
               columnId: 1,
             },
           },

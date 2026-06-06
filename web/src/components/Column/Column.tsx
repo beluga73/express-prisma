@@ -1,30 +1,30 @@
-import { TaskCard } from "../TaskCard";
+import { useDroppable } from "@dnd-kit/react";
 import { Paper, Box, Chip, Typography, Stack } from "@mui/material";
-
-type Task = {
-  id: number;
-  title: string;
-  position: number;
-  columnId: number;
-};
+import { TaskCard } from "../TaskCard";
+import type { Column as ColumnType } from "@/types/schema";
 
 type Props = {
-  id: number;
-  title: string;
-  position: number;
-  tasks: Task[];
+  column: ColumnType;
 };
 
-export const Column = ({ title, tasks }: Props) => {
+export const Column = ({ column }: Props) => {
+  const { ref, isDropTarget } = useDroppable({
+    id: column.id,
+    data: { columnId: column.id },
+  });
+
   return (
     <Paper
+      ref={ref}
       sx={{
         display: "flex",
         flexDirection: "column",
         gap: 1.5,
-        padding: 2,
+        p: 2,
         width: 300,
         minHeight: 400,
+        transition: "background-color 0.15s",
+        bgcolor: isDropTarget ? "action.hover" : "background.paper",
       }}
     >
       <Box
@@ -42,13 +42,13 @@ export const Column = ({ title, tasks }: Props) => {
             letterSpacing: "0.05em",
           }}
         >
-          {title}
+          {column.title}
         </Typography>
-        <Chip label={tasks.length} size="small" />
+        <Chip label={column.tasks.length} size="small" />
       </Box>
       <Stack spacing={1}>
-        {tasks.map((task) => (
-          <TaskCard key={task.id} {...task} />
+        {column.tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
         ))}
       </Stack>
     </Paper>

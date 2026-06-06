@@ -47,9 +47,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -70,14 +69,11 @@ export interface paths {
                     /**
                      * @example {
                      *       "title": "Fix login bug",
-                     *       "position": 0,
                      *       "columnId": 1
                      *     }
                      */
                     "application/json": {
-                        id: number;
                         title: string;
-                        position: number;
                         columnId: number;
                     };
                 };
@@ -97,12 +93,7 @@ export interface paths {
                          *       "columnId": 1
                          *     }
                          */
-                        "application/json": {
-                            id: number;
-                            title: string;
-                            position: number;
-                            columnId: number;
-                        };
+                        "application/json": components["schemas"]["Task"];
                     };
                 };
                 /** @description Invalid request body */
@@ -112,6 +103,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
+                            code: string;
+                            message: string;
                             errors: {
                                 code: string;
                                 message: string;
@@ -127,9 +120,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -177,12 +169,7 @@ export interface paths {
                          *       "columnId": 1
                          *     }
                          */
-                        "application/json": {
-                            id: number;
-                            title: string;
-                            position: number;
-                            columnId: number;
-                        };
+                        "application/json": components["schemas"]["Task"];
                     };
                 };
                 /** @description Resource not found */
@@ -192,9 +179,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -205,9 +191,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -257,12 +242,7 @@ export interface paths {
                          *       "columnId": 2
                          *     }
                          */
-                        "application/json": {
-                            id: number;
-                            title: string;
-                            position: number;
-                            columnId: number;
-                        };
+                        "application/json": components["schemas"]["Task"];
                     };
                 };
                 /** @description Invalid request body */
@@ -272,6 +252,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
+                            code: string;
+                            message: string;
                             errors: {
                                 code: string;
                                 message: string;
@@ -287,9 +269,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -300,9 +281,8 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            errors: {
-                                message: string;
-                            }[];
+                            code: string;
+                            message: string;
                         };
                     };
                 };
@@ -313,7 +293,14 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        Task: {
+            id: number;
+            title: string;
+            position: number;
+            columnId: number;
+        };
+    };
     responses: never;
     parameters: never;
     requestBodies: never;
