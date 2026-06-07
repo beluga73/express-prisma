@@ -1,9 +1,29 @@
+import { LexoRank } from "lexorank";
 import { prisma } from "../lib/prisma";
 import type {
   TaskParams,
   CreateTaskRequest,
-  UpdateTasksResponse,
+  UpdateTaskRequest,
+  MoveTaskRequest,
 } from "../schemas/task.schema";
+
+const calculatePosition = (
+  prevPosition?: string | null,
+  nextPosition?: string | null,
+) => {
+  if (prevPosition && nextPosition) {
+    return LexoRank.parse(prevPosition)
+      .between(LexoRank.parse(nextPosition))
+      .toString();
+  }
+  if (prevPosition) {
+    return LexoRank.parse(prevPosition).genNext().toString();
+  }
+  if (nextPosition) {
+    return LexoRank.parse(nextPosition).genPrev().toString();
+  }
+  return LexoRank.middle().toString();
+};
 
 export const taskService = {
   async getAll() {
@@ -24,7 +44,9 @@ export const taskService = {
       },
     });
 
-    const position = lastTaskInColumn ? lastTaskInColumn.position + 1 : 0;
+    const position = lastTaskInColumn
+      ? LexoRank.parse(lastTaskInColumn.position).genNext().toString()
+      : LexoRank.middle().toString();
 
     return await prisma.tasks.create({
       data: {
@@ -33,10 +55,25 @@ export const taskService = {
       },
     });
   },
-  async update(id: TaskParams["id"], data: UpdateTasksResponse) {
+  async update(id: TaskParams["id"], data: UpdateTaskRequest) {
     return await prisma.tasks.update({
       where: { id },
       data,
+    });
+  },
+  async move(id: TaskParams["id"], data: MoveTaskRequest) {
+    const { columnId, prevId, nextId } = data;
+
+    const [prevTask, nextTask] = await Promise.all([
+      prevId ? prisma.tasks.findUnique({ where: { id: prevId } }) : null,
+      nextId ? prisma.tasks.findUnique({ where: { id: nextId } }) : null,
+    ]);
+
+    const position = calculatePosition(prevTask?.position, nextTask?.position);
+
+    return await prisma.tasks.update({
+      where: { id },
+      data: { columnId, position },
     });
   },
   async delete(id: TaskParams["id"]) {

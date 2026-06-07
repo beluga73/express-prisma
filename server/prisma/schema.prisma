@@ -17,7 +17,7 @@ generator zod {
 model Tasks {
   id       Int    @id @default(autoincrement())
   title    String
-  position Int
+  position String
   columnId Int
   column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
 }

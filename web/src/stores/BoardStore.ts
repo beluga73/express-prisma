@@ -30,7 +30,7 @@ export class BoardStore {
     this.getAllState.run(() => this.apiGetAllTasks());
   }
 
-  async apiCreateTask(task: CreateTaskRequest) {
+  private async apiCreateTask(task: CreateTaskRequest) {
     const { data, error } = await api.POST("/tasks", {
       body: task,
     });
@@ -47,7 +47,8 @@ export class BoardStore {
     this.createState.run(() => this.apiCreateTask(task));
   }
 
-  async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
+  // completely rewrite it, we don't generate postion on frontendc, we send nextId and previd and receive position frontend backend
+  private async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
     const sourceColumn = this.tasks.find((col) =>
       col.tasks.some((t) => t.id === id),
     )!;

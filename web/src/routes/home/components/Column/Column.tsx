@@ -25,6 +25,9 @@ export const Column = observer(({ column }: Props) => {
     data: { columnId: column.id },
   });
 
+  console.log(column.tasks.map((task) => task.columnId));
+  // console.log(column.tasks[0]);
+
   const { BoardStore } = useStores();
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState("");
@@ -76,8 +79,8 @@ export const Column = observer(({ column }: Props) => {
       </Box>
 
       <Stack spacing={1} sx={{ flex: 1 }}>
-        {column.tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+        {column.tasks.map((task, index) => (
+          <TaskCard key={task.id} task={task} index={index} />
         ))}
       </Stack>
 

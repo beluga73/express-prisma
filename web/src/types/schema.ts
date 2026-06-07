@@ -23,6 +23,16 @@ export type UpdateTaskResponse = Exclude<
   undefined
 >["content"]["application/json"];
 
+// PATCH /tasks/{id}/move - Move
+export type MoveTaskRequest = Exclude<
+  paths["/tasks/{id}/move"]["patch"]["requestBody"],
+  undefined
+>["content"]["application/json"];
+export type MoveTaskResponse = Exclude<
+  paths["/tasks/{id}/move"]["patch"]["responses"]["200"],
+  undefined
+>["content"]["application/json"];
+
 // DELETE /tasks/{id}
 export type DeleteTaskResponse = Exclude<
   paths["/tasks/{id}"]["delete"]["responses"]["200"],

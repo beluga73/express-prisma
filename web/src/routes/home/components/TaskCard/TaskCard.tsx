@@ -1,25 +1,32 @@
-import { useDraggable } from "@dnd-kit/react";
+import { useSortable } from "@dnd-kit/react/sortable";
 import { Card, Typography } from "@mui/material";
 import type { Task } from "@/types/schema";
 import { observer } from "mobx-react-lite";
 
 type Props = {
   task: Task;
+  index: number;
 };
 
-// Apprantely 'observer' is needed here when we update the task paritally, as the column won't re-render
-// check it by swapping removing 'observer'
-export const TaskCard = observer(({ task }: Props) => {
-  const { handleRef, isDragging } = useDraggable({ id: task.id, data: task });
+export const TaskCard = observer(({ task, index }: Props) => {
+  const { ref, handleRef, isDragging } = useSortable({
+    id: task.id,
+    index,
+    group: task.columnId,
+    data: task,
+  });
 
   return (
     <Card
-      ref={handleRef}
+      ref={(el) => {
+        ref(el);
+        handleRef(el);
+      }}
       sx={{
         px: 1.5,
         py: 1,
         cursor: isDragging ? "grabbing" : "grab",
-        opacity: isDragging ? 0.4 : 1,
+        opacity: isDragging ? 0 : 1,
         transition: "opacity 0.2s, box-shadow 0.2s",
         "&:hover": { boxShadow: 2 },
       }}

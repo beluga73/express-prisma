@@ -4,6 +4,7 @@ import {
   TaskParamsSchema,
   CreateTaskRequestSchema,
   UpdateTaskRequestSchema,
+  MoveTaskRequestSchema,
 } from "@/schemas/task.schema";
 
 const router = Router();
@@ -23,6 +24,13 @@ router.patch("/:id", async (req, res) => {
   const { id } = TaskParamsSchema.parse(req.params);
   const data = UpdateTaskRequestSchema.parse(req.body);
   const task = await taskService.update(id, data);
+  res.json(task);
+});
+
+router.patch("/:id/move", async (req, res) => {
+  const { id } = TaskParamsSchema.parse(req.params);
+  const data = MoveTaskRequestSchema.parse(req.body);
+  const task = await taskService.move(id, data);
   res.json(task);
 });
 

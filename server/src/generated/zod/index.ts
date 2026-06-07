@@ -30,7 +30,7 @@ export const QueryModeSchema = z.enum(['default','insensitive']);
 export const TasksSchema = z.object({
   id: z.number().int(),
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
   columnId: z.number().int(),
 })
 
@@ -112,7 +112,7 @@ export const TasksWhereInputSchema: z.ZodType<Prisma.TasksWhereInput> = z.strict
   NOT: z.union([ z.lazy(() => TasksWhereInputSchema), z.lazy(() => TasksWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
-  position: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
+  position: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
   columnId: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
   column: z.union([ z.lazy(() => ColumnScalarRelationFilterSchema), z.lazy(() => ColumnWhereInputSchema) ]).optional(),
 });
@@ -134,7 +134,7 @@ export const TasksWhereUniqueInputSchema: z.ZodType<Prisma.TasksWhereUniqueInput
   OR: z.lazy(() => TasksWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => TasksWhereInputSchema), z.lazy(() => TasksWhereInputSchema).array() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
-  position: z.union([ z.lazy(() => IntFilterSchema), z.number().int() ]).optional(),
+  position: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
   columnId: z.union([ z.lazy(() => IntFilterSchema), z.number().int() ]).optional(),
   column: z.union([ z.lazy(() => ColumnScalarRelationFilterSchema), z.lazy(() => ColumnWhereInputSchema) ]).optional(),
 }));
@@ -157,7 +157,7 @@ export const TasksScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.TasksSc
   NOT: z.union([ z.lazy(() => TasksScalarWhereWithAggregatesInputSchema), z.lazy(() => TasksScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => IntWithAggregatesFilterSchema), z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
-  position: z.union([ z.lazy(() => IntWithAggregatesFilterSchema), z.number() ]).optional(),
+  position: z.union([ z.lazy(() => StringWithAggregatesFilterSchema), z.string() ]).optional(),
   columnId: z.union([ z.lazy(() => IntWithAggregatesFilterSchema), z.number() ]).optional(),
 });
 
@@ -213,46 +213,46 @@ export const ColumnScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Column
 
 export const TasksCreateInputSchema: z.ZodType<Prisma.TasksCreateInput> = z.strictObject({
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
   column: z.lazy(() => ColumnCreateNestedOneWithoutTasksInputSchema),
 });
 
 export const TasksUncheckedCreateInputSchema: z.ZodType<Prisma.TasksUncheckedCreateInput> = z.strictObject({
   id: z.number().int().optional(),
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
   columnId: z.number().int(),
 });
 
 export const TasksUpdateInputSchema: z.ZodType<Prisma.TasksUpdateInput> = z.strictObject({
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   column: z.lazy(() => ColumnUpdateOneRequiredWithoutTasksNestedInputSchema).optional(),
 });
 
 export const TasksUncheckedUpdateInputSchema: z.ZodType<Prisma.TasksUncheckedUpdateInput> = z.strictObject({
   id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   columnId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
 export const TasksCreateManyInputSchema: z.ZodType<Prisma.TasksCreateManyInput> = z.strictObject({
   id: z.number().int().optional(),
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
   columnId: z.number().int(),
 });
 
 export const TasksUpdateManyMutationInputSchema: z.ZodType<Prisma.TasksUpdateManyMutationInput> = z.strictObject({
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
 export const TasksUncheckedUpdateManyInputSchema: z.ZodType<Prisma.TasksUncheckedUpdateManyInput> = z.strictObject({
   id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   columnId: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
@@ -339,7 +339,6 @@ export const TasksCountOrderByAggregateInputSchema: z.ZodType<Prisma.TasksCountO
 
 export const TasksAvgOrderByAggregateInputSchema: z.ZodType<Prisma.TasksAvgOrderByAggregateInput> = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
-  position: z.lazy(() => SortOrderSchema).optional(),
   columnId: z.lazy(() => SortOrderSchema).optional(),
 });
 
@@ -359,7 +358,6 @@ export const TasksMinOrderByAggregateInputSchema: z.ZodType<Prisma.TasksMinOrder
 
 export const TasksSumOrderByAggregateInputSchema: z.ZodType<Prisma.TasksSumOrderByAggregateInput> = z.strictObject({
   id: z.lazy(() => SortOrderSchema).optional(),
-  position: z.lazy(() => SortOrderSchema).optional(),
   columnId: z.lazy(() => SortOrderSchema).optional(),
 });
 
@@ -445,20 +443,20 @@ export const StringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.StringFiel
   set: z.string().optional(),
 });
 
-export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.strictObject({
-  set: z.number().optional(),
-  increment: z.number().optional(),
-  decrement: z.number().optional(),
-  multiply: z.number().optional(),
-  divide: z.number().optional(),
-});
-
 export const ColumnUpdateOneRequiredWithoutTasksNestedInputSchema: z.ZodType<Prisma.ColumnUpdateOneRequiredWithoutTasksNestedInput> = z.strictObject({
   create: z.union([ z.lazy(() => ColumnCreateWithoutTasksInputSchema), z.lazy(() => ColumnUncheckedCreateWithoutTasksInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => ColumnCreateOrConnectWithoutTasksInputSchema).optional(),
   upsert: z.lazy(() => ColumnUpsertWithoutTasksInputSchema).optional(),
   connect: z.lazy(() => ColumnWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => ColumnUpdateToOneWithWhereWithoutTasksInputSchema), z.lazy(() => ColumnUpdateWithoutTasksInputSchema), z.lazy(() => ColumnUncheckedUpdateWithoutTasksInputSchema) ]).optional(),
+});
+
+export const IntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.IntFieldUpdateOperationsInput> = z.strictObject({
+  set: z.number().optional(),
+  increment: z.number().optional(),
+  decrement: z.number().optional(),
+  multiply: z.number().optional(),
+  divide: z.number().optional(),
 });
 
 export const TasksCreateNestedManyWithoutColumnInputSchema: z.ZodType<Prisma.TasksCreateNestedManyWithoutColumnInput> = z.strictObject({
@@ -612,13 +610,13 @@ export const ColumnUncheckedUpdateWithoutTasksInputSchema: z.ZodType<Prisma.Colu
 
 export const TasksCreateWithoutColumnInputSchema: z.ZodType<Prisma.TasksCreateWithoutColumnInput> = z.strictObject({
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
 });
 
 export const TasksUncheckedCreateWithoutColumnInputSchema: z.ZodType<Prisma.TasksUncheckedCreateWithoutColumnInput> = z.strictObject({
   id: z.number().int().optional(),
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
 });
 
 export const TasksCreateOrConnectWithoutColumnInputSchema: z.ZodType<Prisma.TasksCreateOrConnectWithoutColumnInput> = z.strictObject({
@@ -653,31 +651,31 @@ export const TasksScalarWhereInputSchema: z.ZodType<Prisma.TasksScalarWhereInput
   NOT: z.union([ z.lazy(() => TasksScalarWhereInputSchema), z.lazy(() => TasksScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
   title: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
-  position: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
+  position: z.union([ z.lazy(() => StringFilterSchema), z.string() ]).optional(),
   columnId: z.union([ z.lazy(() => IntFilterSchema), z.number() ]).optional(),
 });
 
 export const TasksCreateManyColumnInputSchema: z.ZodType<Prisma.TasksCreateManyColumnInput> = z.strictObject({
   id: z.number().int().optional(),
   title: z.string(),
-  position: z.number().int(),
+  position: z.string(),
 });
 
 export const TasksUpdateWithoutColumnInputSchema: z.ZodType<Prisma.TasksUpdateWithoutColumnInput> = z.strictObject({
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
 export const TasksUncheckedUpdateWithoutColumnInputSchema: z.ZodType<Prisma.TasksUncheckedUpdateWithoutColumnInput> = z.strictObject({
   id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
 export const TasksUncheckedUpdateManyWithoutColumnInputSchema: z.ZodType<Prisma.TasksUncheckedUpdateManyWithoutColumnInput> = z.strictObject({
   id: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  position: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  position: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
 });
 
 /////////////////////////////////////////

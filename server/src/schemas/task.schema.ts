@@ -11,15 +11,22 @@ export const GetTasksResponseSchema = z.array(
   }),
 );
 
-export const UpdateTaskRequestSchema = TasksSchema.omit({ id: true }).partial();
-export type UpdateTasksResponse = z.output<typeof UpdateTaskRequestSchema>;
-
 export const CreateTaskRequestSchema = TasksSchema.omit({
   id: true,
   position: true,
 });
 export type CreateTaskRequest = z.output<typeof CreateTaskRequestSchema>;
 export const CreateTaskResponseSchema = TasksSchema.openapi("Task");
+
+export const UpdateTaskRequestSchema = TasksSchema.pick({ title: true });
+export type UpdateTaskRequest = z.output<typeof UpdateTaskRequestSchema>;
+
+export const MoveTaskRequestSchema = z.object({
+  columnId: z.coerce.number().int().positive(),
+  prevId: z.coerce.number().int().positive().nullish(),
+  nextId: z.coerce.number().int().positive().nullish(),
+});
+export type MoveTaskRequest = z.output<typeof MoveTaskRequestSchema>;
 
 export const ValidationErrorSchema = z.object({
   code: z.string(),

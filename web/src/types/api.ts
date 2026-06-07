@@ -34,7 +34,7 @@ export interface paths {
                             tasks: {
                                 id: number;
                                 title: string;
-                                position: number;
+                                position: string;
                                 columnId: number;
                             }[];
                         }[];
@@ -89,7 +89,7 @@ export interface paths {
                          * @example {
                          *       "id": 1,
                          *       "title": "Fix login bug",
-                         *       "position": 0,
+                         *       "position": "0|10000:",
                          *       "columnId": 1
                          *     }
                          */
@@ -165,7 +165,7 @@ export interface paths {
                          * @example {
                          *       "id": 1,
                          *       "title": "Fix login bug",
-                         *       "position": 0,
+                         *       "position": "0|10000:",
                          *       "columnId": 1
                          *     }
                          */
@@ -200,7 +200,7 @@ export interface paths {
         };
         options?: never;
         head?: never;
-        /** Update a task */
+        /** Update a task's fields (e.g. title) */
         patch: {
             parameters: {
                 query?: never;
@@ -215,15 +215,11 @@ export interface paths {
                 content: {
                     /**
                      * @example {
-                     *       "title": "Updated title",
-                     *       "position": 5,
-                     *       "columnId": 2
+                     *       "title": "Updated title"
                      *     }
                      */
                     "application/json": {
-                        title?: string;
-                        position?: number;
-                        columnId?: number;
+                        title: string;
                     };
                 };
             };
@@ -238,7 +234,113 @@ export interface paths {
                          * @example {
                          *       "id": 1,
                          *       "title": "Updated title",
-                         *       "position": 5,
+                         *       "position": "0|10000:",
+                         *       "columnId": 2
+                         *     }
+                         */
+                        "application/json": components["schemas"]["Task"];
+                    };
+                };
+                /** @description Invalid request body */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message: string;
+                            errors: {
+                                code: string;
+                                message: string;
+                                path?: (string | number)[];
+                            }[];
+                        };
+                    };
+                };
+                /** @description Resource not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message: string;
+                        };
+                    };
+                };
+                /** @description Internal server error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            message: string;
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/tasks/{id}/move": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Move a task to another column and/or position
+         * @description Recalculates the task's position based on the tasks it should end up between. Omit prevId/nextId when the task is dropped at the start/end of the column or into an empty column.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            /** @description Target column and surrounding tasks */
+            requestBody?: {
+                content: {
+                    /**
+                     * @example {
+                     *       "columnId": 2,
+                     *       "prevId": 4,
+                     *       "nextId": 7
+                     *     }
+                     */
+                    "application/json": {
+                        columnId: number;
+                        prevId?: number | null;
+                        nextId?: number | null;
+                    };
+                };
+            };
+            responses: {
+                /** @description Task moved successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        /**
+                         * @example {
+                         *       "id": 1,
+                         *       "title": "Updated title",
+                         *       "position": "0|10000:",
                          *       "columnId": 2
                          *     }
                          */
@@ -297,7 +399,7 @@ export interface components {
         Task: {
             id: number;
             title: string;
-            position: number;
+            position: string;
             columnId: number;
         };
     };

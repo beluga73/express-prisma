@@ -4,6 +4,7 @@ import {
   CreateTaskRequestSchema,
   CreateTaskResponseSchema,
   UpdateTaskRequestSchema,
+  MoveTaskRequestSchema,
   TaskParamsSchema,
 } from "@/schemas/task.schema";
 import {
@@ -57,7 +58,7 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
             example: {
               id: 1,
               title: "Fix login bug",
-              position: 0,
+              position: "0|10000:",
               columnId: 1,
             },
           },
@@ -70,7 +71,7 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: "patch",
     path: "/tasks/{id}",
-    summary: "Update a task",
+    summary: "Update a task's fields (e.g. title)",
     request: {
       params: TaskParamsSchema,
       body: {
@@ -80,8 +81,6 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
             schema: UpdateTaskRequestSchema,
             example: {
               title: "Updated title",
-              position: 5,
-              columnId: 2,
             },
           },
         },
@@ -96,7 +95,50 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
             example: {
               id: 1,
               title: "Updated title",
-              position: 5,
+              position: "0|10000:",
+              columnId: 2,
+            },
+          },
+        },
+      },
+      ...VALIDATION_ERROR,
+      ...NOT_FOUND_ERROR,
+      ...INTERNAL_SERVER_ERROR,
+    },
+  });
+  registry.registerPath({
+    method: "patch",
+    path: "/tasks/{id}/move",
+    summary: "Move a task to another column and/or position",
+    description:
+      "Recalculates the task's position based on the tasks it should end up between. " +
+      "Omit prevId/nextId when the task is dropped at the start/end of the column or into an empty column.",
+    request: {
+      params: TaskParamsSchema,
+      body: {
+        description: "Target column and surrounding tasks",
+        content: {
+          "application/json": {
+            schema: MoveTaskRequestSchema,
+            example: {
+              columnId: 2,
+              prevId: 4,
+              nextId: 7,
+            },
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "Task moved successfully",
+        content: {
+          "application/json": {
+            schema: CreateTaskResponseSchema,
+            example: {
+              id: 1,
+              title: "Updated title",
+              position: "0|10000:",
               columnId: 2,
             },
           },
@@ -123,7 +165,7 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
             example: {
               id: 1,
               title: "Fix login bug",
-              position: 0,
+              position: "0|10000:",
               columnId: 1,
             },
           },

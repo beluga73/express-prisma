@@ -28,27 +28,25 @@ export type AggregateTasks = {
 
 export type TasksAvgAggregateOutputType = {
   id: number | null
-  position: number | null
   columnId: number | null
 }
 
 export type TasksSumAggregateOutputType = {
   id: number | null
-  position: number | null
   columnId: number | null
 }
 
 export type TasksMinAggregateOutputType = {
   id: number | null
   title: string | null
-  position: number | null
+  position: string | null
   columnId: number | null
 }
 
 export type TasksMaxAggregateOutputType = {
   id: number | null
   title: string | null
-  position: number | null
+  position: string | null
   columnId: number | null
 }
 
@@ -63,13 +61,11 @@ export type TasksCountAggregateOutputType = {
 
 export type TasksAvgAggregateInputType = {
   id?: true
-  position?: true
   columnId?: true
 }
 
 export type TasksSumAggregateInputType = {
   id?: true
-  position?: true
   columnId?: true
 }
 
@@ -184,7 +180,7 @@ export type TasksGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type TasksGroupByOutputType = {
   id: number
   title: string
-  position: number
+  position: string
   columnId: number
   _count: TasksCountAggregateOutputType | null
   _avg: TasksAvgAggregateOutputType | null
@@ -214,7 +210,7 @@ export type TasksWhereInput = {
   NOT?: Prisma.TasksWhereInput | Prisma.TasksWhereInput[]
   id?: Prisma.IntFilter<"Tasks"> | number
   title?: Prisma.StringFilter<"Tasks"> | string
-  position?: Prisma.IntFilter<"Tasks"> | number
+  position?: Prisma.StringFilter<"Tasks"> | string
   columnId?: Prisma.IntFilter<"Tasks"> | number
   column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }
@@ -233,7 +229,7 @@ export type TasksWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TasksWhereInput[]
   NOT?: Prisma.TasksWhereInput | Prisma.TasksWhereInput[]
   title?: Prisma.StringFilter<"Tasks"> | string
-  position?: Prisma.IntFilter<"Tasks"> | number
+  position?: Prisma.StringFilter<"Tasks"> | string
   columnId?: Prisma.IntFilter<"Tasks"> | number
   column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.ColumnWhereInput>
 }, "id">
@@ -256,52 +252,52 @@ export type TasksScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TasksScalarWhereWithAggregatesInput | Prisma.TasksScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
   title?: Prisma.StringWithAggregatesFilter<"Tasks"> | string
-  position?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
+  position?: Prisma.StringWithAggregatesFilter<"Tasks"> | string
   columnId?: Prisma.IntWithAggregatesFilter<"Tasks"> | number
 }
 
 export type TasksCreateInput = {
   title: string
-  position: number
+  position: string
   column: Prisma.ColumnCreateNestedOneWithoutTasksInput
 }
 
 export type TasksUncheckedCreateInput = {
   id?: number
   title: string
-  position: number
+  position: string
   columnId: number
 }
 
 export type TasksUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
   column?: Prisma.ColumnUpdateOneRequiredWithoutTasksNestedInput
 }
 
 export type TasksUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
   columnId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TasksCreateManyInput = {
   id?: number
   title: string
-  position: number
+  position: string
   columnId: number
 }
 
 export type TasksUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TasksUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
   columnId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -314,7 +310,6 @@ export type TasksCountOrderByAggregateInput = {
 
 export type TasksAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  position?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
 }
 
@@ -334,7 +329,6 @@ export type TasksMinOrderByAggregateInput = {
 
 export type TasksSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  position?: Prisma.SortOrder
   columnId?: Prisma.SortOrder
 }
 
@@ -404,13 +398,13 @@ export type TasksUncheckedUpdateManyWithoutColumnNestedInput = {
 
 export type TasksCreateWithoutColumnInput = {
   title: string
-  position: number
+  position: string
 }
 
 export type TasksUncheckedCreateWithoutColumnInput = {
   id?: number
   title: string
-  position: number
+  position: string
 }
 
 export type TasksCreateOrConnectWithoutColumnInput = {
@@ -445,31 +439,31 @@ export type TasksScalarWhereInput = {
   NOT?: Prisma.TasksScalarWhereInput | Prisma.TasksScalarWhereInput[]
   id?: Prisma.IntFilter<"Tasks"> | number
   title?: Prisma.StringFilter<"Tasks"> | string
-  position?: Prisma.IntFilter<"Tasks"> | number
+  position?: Prisma.StringFilter<"Tasks"> | string
   columnId?: Prisma.IntFilter<"Tasks"> | number
 }
 
 export type TasksCreateManyColumnInput = {
   id?: number
   title: string
-  position: number
+  position: string
 }
 
 export type TasksUpdateWithoutColumnInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TasksUncheckedUpdateWithoutColumnInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type TasksUncheckedUpdateManyWithoutColumnInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.IntFieldUpdateOperationsInput | number
+  position?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -524,7 +518,7 @@ export type $TasksPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
-    position: number
+    position: string
     columnId: number
   }, ExtArgs["result"]["tasks"]>
   composites: {}
@@ -952,7 +946,7 @@ export interface Prisma__TasksClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface TasksFieldRefs {
   readonly id: Prisma.FieldRef<"Tasks", 'Int'>
   readonly title: Prisma.FieldRef<"Tasks", 'String'>
-  readonly position: Prisma.FieldRef<"Tasks", 'Int'>
+  readonly position: Prisma.FieldRef<"Tasks", 'String'>
   readonly columnId: Prisma.FieldRef<"Tasks", 'Int'>
 }
     
