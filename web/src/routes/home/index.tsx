@@ -68,7 +68,7 @@ const App = observer(() => {
     } else {
       // Dropped onto a column container (empty column or column background)
       const targetColumnId = operation.target.id as number;
-      const targetColumn = BoardStore.tasks.find(
+      const targetColumn = BoardStore.columns.find(
         (col) => col.id === targetColumnId,
       );
 
@@ -94,7 +94,7 @@ const App = observer(() => {
       onDragEnd={handleDragEnd}
     >
       <Box sx={{ display: "flex", gap: 1 }}>
-        {BoardStore.tasks.map((column) => (
+        {BoardStore.columns.map((column) => (
           <Column key={column.id} column={column} />
         ))}
       </Box>

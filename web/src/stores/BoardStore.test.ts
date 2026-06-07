@@ -45,14 +45,14 @@ describe("BoardStore", () => {
 
     await boardStore.getAllTasks();
 
-    expect(boardStore.tasks).toEqual(mockColumns);
+    expect(boardStore.columns).toEqual(mockColumns);
   });
 
   it("should create a task", async () => {
     const boardStore = new BoardStore();
 
     const mockColumns = [createMockColumn()];
-    boardStore.tasks = mockColumns;
+    boardStore.columns = mockColumns;
 
     const mockTask = createMockTodo();
 
@@ -63,7 +63,7 @@ describe("BoardStore", () => {
 
     await boardStore.createTask(mockTask);
 
-    expect(boardStore.tasks[0].tasks[0]).toEqual(mockTask);
+    expect(boardStore.columns[0].tasks[0]).toEqual(mockTask);
   });
 
   it("should update a task", async () => {
@@ -71,7 +71,7 @@ describe("BoardStore", () => {
 
     const mockTask = createMockTodo();
     const mockColumns = [createMockColumn({ tasks: [mockTask] })];
-    boardStore.tasks = mockColumns;
+    boardStore.columns = mockColumns;
 
     const newTodo = createMockTodo({ title: "new title" });
 
@@ -82,7 +82,7 @@ describe("BoardStore", () => {
 
     await boardStore.updateTask(1, newTodo);
 
-    expect(boardStore.tasks[0].tasks[0]).toEqual(newTodo);
+    expect(boardStore.columns[0].tasks[0]).toEqual(newTodo);
   });
 
   it("should roll back a task update if the request fails", async () => {
@@ -90,7 +90,7 @@ describe("BoardStore", () => {
 
     const mockTask = createMockTodo({ title: "original title" });
     const mockColumns = [createMockColumn({ tasks: [mockTask] })];
-    boardStore.tasks = mockColumns;
+    boardStore.columns = mockColumns;
 
     const mockError = { code: "VALIDATION_ERROR", message: "Invalid title" };
     vi.mocked(api.PATCH).mockResolvedValue({
@@ -100,7 +100,7 @@ describe("BoardStore", () => {
 
     await boardStore.updateTask(1, { title: "new title" });
 
-    expect(boardStore.tasks[0].tasks[0].title).toBe("original title");
+    expect(boardStore.columns[0].tasks[0].title).toBe("original title");
     expect(boardStore.updateState.error).toEqual(mockError);
   });
 
@@ -112,7 +112,7 @@ describe("BoardStore", () => {
       createMockTodo({ id: 2, position: "b", columnId: 1 }),
       createMockTodo({ id: 3, position: "c", columnId: 1 }),
     ];
-    boardStore.tasks = [createMockColumn({ tasks })];
+    boardStore.columns = [createMockColumn({ tasks })];
 
     const movedTodo = createMockTodo({ id: 1, position: "d", columnId: 1 });
     vi.mocked(api.PATCH).mockResolvedValue({
@@ -122,7 +122,7 @@ describe("BoardStore", () => {
 
     await boardStore.moveTask(1, { columnId: 1, targetIndex: 2 });
 
-    const column = boardStore.tasks[0];
+    const column = boardStore.columns[0];
     expect(column.tasks.map((t) => t.id)).toEqual([2, 3, 1]);
     expect(column.tasks[2].position).toBe("d");
     expect(api.PATCH).toHaveBeenCalledWith("/tasks/{id}/move", {
@@ -139,7 +139,7 @@ describe("BoardStore", () => {
       createMockTodo({ id: 2, position: "b", columnId: 1 }),
     ];
     const destTasks = [createMockTodo({ id: 4, position: "a", columnId: 2 })];
-    boardStore.tasks = [
+    boardStore.columns = [
       createMockColumn({ id: 1, tasks: sourceTasks }),
       createMockColumn({ id: 2, tasks: destTasks }),
     ];
@@ -152,7 +152,7 @@ describe("BoardStore", () => {
 
     await boardStore.moveTask(1, { columnId: 2, targetIndex: 0 });
 
-    const [sourceColumn, destColumn] = boardStore.tasks;
+    const [sourceColumn, destColumn] = boardStore.columns;
     expect(sourceColumn.tasks.map((t) => t.id)).toEqual([2]);
     expect(destColumn.tasks.map((t) => t.id)).toEqual([1, 4]);
     expect(destColumn.tasks[0].columnId).toBe(2);
@@ -169,12 +169,12 @@ describe("BoardStore", () => {
       createMockTodo({ id: 1, position: "a", columnId: 1 }),
       createMockTodo({ id: 2, position: "b", columnId: 1 }),
     ];
-    boardStore.tasks = [createMockColumn({ id: 1, tasks })];
+    boardStore.columns = [createMockColumn({ id: 1, tasks })];
 
     await boardStore.moveTask(1, { columnId: 1, targetIndex: 0 });
 
     expect(api.PATCH).not.toHaveBeenCalled();
-    expect(boardStore.tasks[0].tasks.map((t) => t.id)).toEqual([1, 2]);
+    expect(boardStore.columns[0].tasks.map((t) => t.id)).toEqual([1, 2]);
   });
 
   it("should roll back a move if the request fails", async () => {
@@ -185,7 +185,7 @@ describe("BoardStore", () => {
       createMockTodo({ id: 2, position: "b", columnId: 1 }),
     ];
     const destTasks = [createMockTodo({ id: 4, position: "a", columnId: 2 })];
-    boardStore.tasks = [
+    boardStore.columns = [
       createMockColumn({ id: 1, tasks: sourceTasks }),
       createMockColumn({ id: 2, tasks: destTasks }),
     ];
@@ -198,7 +198,7 @@ describe("BoardStore", () => {
 
     await boardStore.moveTask(1, { columnId: 2, targetIndex: 0 });
 
-    const [sourceColumn, destColumn] = boardStore.tasks;
+    const [sourceColumn, destColumn] = boardStore.columns;
     expect(sourceColumn.tasks.map((t) => t.id)).toEqual([1, 2]);
     expect(destColumn.tasks.map((t) => t.id)).toEqual([4]);
     expect(sourceColumn.tasks[0].columnId).toBe(1);
@@ -210,7 +210,7 @@ describe("BoardStore", () => {
 
     const mockTask = createMockTodo();
     const mockColumns = [createMockColumn({ tasks: [mockTask] })];
-    boardStore.tasks = mockColumns;
+    boardStore.columns = mockColumns;
 
     vi.mocked(api.POST).mockResolvedValue({
       data: mockTask,
@@ -219,7 +219,7 @@ describe("BoardStore", () => {
 
     await boardStore.deleteTask(mockTask);
 
-    expect(boardStore.tasks[0].tasks.length).toBe(0);
+    expect(boardStore.columns[0].tasks.length).toBe(0);
   });
 
   it("should rollback delete if request fails", async () => {
@@ -227,7 +227,7 @@ describe("BoardStore", () => {
 
     const mockTask = createMockTodo();
     const mockColumns = [createMockColumn({ tasks: [mockTask] })];
-    boardStore.tasks = mockColumns;
+    boardStore.columns = mockColumns;
 
     const mockError = {
       code: "NETWORK_ERROR",
@@ -241,6 +241,6 @@ describe("BoardStore", () => {
 
     await boardStore.deleteTask(mockTask);
 
-    expect(boardStore.tasks[0].tasks[0]).toEqual(mockTask);
+    expect(boardStore.columns[0].tasks[0]).toEqual(mockTask);
   });
 });

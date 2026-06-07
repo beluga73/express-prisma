@@ -15,7 +15,7 @@ type TaskMove = {
 };
 
 export class BoardStore {
-  tasks: GetTasksResponse = [];
+  columns: GetTasksResponse = [];
   getAllState = new RequestState();
   createState = new RequestState();
   updateState = new RequestState();
@@ -31,7 +31,7 @@ export class BoardStore {
 
     if (error) return error;
 
-    runInAction(() => (this.tasks = data));
+    runInAction(() => (this.columns = data));
   }
   getAllTasks() {
     return this.getAllState.run(() => this.apiGetAllTasks());
@@ -45,7 +45,7 @@ export class BoardStore {
     if (error) return error;
 
     runInAction(() => {
-      const column = this.tasks.find((column) => column.id === data.columnId)!;
+      const column = this.columns.find((column) => column.id === data.columnId)!;
       column.tasks.push(data);
     });
   }
@@ -54,7 +54,7 @@ export class BoardStore {
   }
 
   private async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
-    const sourceColumn = this.tasks.find((col) =>
+    const sourceColumn = this.columns.find((col) =>
       col.tasks.some((t) => t.id === id),
     )!;
     const oldTask = sourceColumn.tasks.find((t) => t.id === id)!;
@@ -79,10 +79,10 @@ export class BoardStore {
   }
 
   private async apiMoveTask(id: TaskId, move: TaskMove) {
-    const sourceColumn = this.tasks.find((col) =>
+    const sourceColumn = this.columns.find((col) =>
       col.tasks.some((t) => t.id === id),
     )!;
-    const destColumn = this.tasks.find((col) => col.id === move.columnId)!;
+    const destColumn = this.columns.find((col) => col.id === move.columnId)!;
     const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === id);
     const oldTask = sourceColumn.tasks[originalIndex];
     const oldTaskCopy = { ...oldTask };
@@ -128,7 +128,7 @@ export class BoardStore {
   }
 
   private async apiDeleteTask(task: DeleteTaskRequest) {
-    const sourceColumn = this.tasks.find((col) => col.id === task.columnId)!;
+    const sourceColumn = this.columns.find((col) => col.id === task.columnId)!;
     const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === task.id);
     if (originalIndex === -1) {
       return {
