@@ -25,9 +25,6 @@ export const Column = observer(({ column }: Props) => {
     data: { columnId: column.id },
   });
 
-  console.log(column.tasks.map((task) => task.columnId));
-  // console.log(column.tasks[0]);
-
   const { BoardStore } = useStores();
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState("");

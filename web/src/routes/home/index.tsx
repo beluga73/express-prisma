@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Column } from "./components";
 import { DragDropProvider, DragOverlay } from "@dnd-kit/react";
-import type { DragEndEvent, DragStartEvent } from "@dnd-kit/react";
+import type {
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from "@dnd-kit/react";
 import { isSortableOperation } from "@dnd-kit/react/sortable";
 import type { Task } from "@/types/schema";
 
@@ -21,6 +25,27 @@ const App = observer(() => {
     if (task) setDraggedTask(task);
   };
 
+  const handleDragOver = (event: DragOverEvent) => {
+    const { operation } = event;
+    if (
+      !isSortableOperation(operation) ||
+      !operation.source ||
+      !operation.target
+    )
+      return;
+
+    // OptimisticSortingPlugin physically relocates the dragged DOM node into the
+    // target column's container while hovering over a different column. That move
+    // happens outside React's view of the DOM and conflicts with the re-render we
+    // trigger from BoardStore.moveTask once the drop completes ("removeChild: not
+    // a child of this node"). Same-column reordering is fine — it only repositions
+    // siblings within a container React already owns — so we only block the
+    // cross-column relocation by marking the event as handled.
+    if (operation.source.sortable.group !== operation.target.sortable.group) {
+      event.preventDefault();
+    }
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     setDraggedTask(null);
 
@@ -29,25 +54,27 @@ const App = observer(() => {
 
     const taskId = operation.source.id as number;
     const sourceColumnId = operation.source.initialGroup as number;
+    console.log(sourceColumnId);
     const initialIndex = operation.source.initialIndex as number;
 
     if (isSortableOperation(operation)) {
       const targetColumnId = operation.target.group as number;
       const targetIndex = operation.target.index as number;
 
-      if (targetIndex === initialIndex && targetColumnId === sourceColumnId) return;
+      if (targetIndex === initialIndex && targetColumnId === sourceColumnId)
+        return;
 
-      BoardStore.updateTask(taskId, {
-        position: targetIndex,
-        ...(targetColumnId !== sourceColumnId && { columnId: targetColumnId }),
-      });
+      BoardStore.moveTask(taskId, { columnId: targetColumnId, targetIndex });
     } else {
       // Dropped onto a column container (empty column or column background)
       const targetColumnId = operation.target.id as number;
-      const targetColumn = BoardStore.tasks.find((col) => col.id === targetColumnId);
-      BoardStore.updateTask(taskId, {
+      const targetColumn = BoardStore.tasks.find(
+        (col) => col.id === targetColumnId,
+      );
+
+      BoardStore.moveTask(taskId, {
         columnId: targetColumnId,
-        position: targetColumn?.tasks.length ?? 0,
+        targetIndex: targetColumn?.tasks.length ?? 0,
       });
     }
   };
@@ -61,7 +88,11 @@ const App = observer(() => {
   }
 
   return (
-    <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DragDropProvider
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <Box sx={{ display: "flex", gap: 1 }}>
         {BoardStore.tasks.map((column) => (
           <Column key={column.id} column={column} />

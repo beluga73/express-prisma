@@ -8,6 +8,11 @@ import type {
   UpdateTaskRequest,
 } from "@/types/schema";
 
+type TaskMove = {
+  columnId: number;
+  targetIndex: number;
+};
+
 export class BoardStore {
   tasks: GetTasksResponse = [];
   getAllState = new RequestState();
@@ -25,7 +30,6 @@ export class BoardStore {
 
     runInAction(() => (this.tasks = data));
   }
-
   async getAllTasks() {
     this.getAllState.run(() => this.apiGetAllTasks());
   }
@@ -42,34 +46,18 @@ export class BoardStore {
       column.tasks.push(data);
     });
   }
-
   async createTask(task: CreateTaskRequest) {
     this.createState.run(() => this.apiCreateTask(task));
   }
 
-  // completely rewrite it, we don't generate postion on frontendc, we send nextId and previd and receive position frontend backend
   private async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
     const sourceColumn = this.tasks.find((col) =>
       col.tasks.some((t) => t.id === id),
     )!;
     const oldTask = sourceColumn.tasks.find((t) => t.id === id)!;
-
     const oldTaskCopy = { ...oldTask };
-    const originalIndex = sourceColumn.tasks.indexOf(oldTask);
-
-    const targetColumnId = task.columnId ?? oldTaskCopy.columnId;
-    const targetIndex = task.position ?? originalIndex;
-
-    const hasLayoutChanged =
-      targetColumnId !== oldTaskCopy.columnId || targetIndex !== originalIndex;
 
     Object.assign(oldTask, task);
-
-    if (hasLayoutChanged) {
-      sourceColumn.tasks.splice(originalIndex, 1);
-      const destColumn = this.tasks.find((col) => col.id === targetColumnId)!;
-      destColumn.tasks.splice(targetIndex, 0, oldTask);
-    }
 
     const { data, error } = await api.PATCH("/tasks/{id}", {
       params: { path: { id } },
@@ -77,25 +65,63 @@ export class BoardStore {
     });
 
     if (error) {
-      runInAction(() => {
-        Object.assign(oldTask, oldTaskCopy);
-
-        if (hasLayoutChanged) {
-          const currentColumn = this.tasks.find(
-            (col) => col.id === targetColumnId,
-          )!;
-          const currentIndex = currentColumn.tasks.indexOf(oldTask);
-          currentColumn.tasks.splice(currentIndex, 1);
-
-          sourceColumn.tasks.splice(originalIndex, 0, oldTask);
-        }
-      });
+      runInAction(() => Object.assign(oldTask, oldTaskCopy));
       return error;
-    } else {
-      runInAction(() => Object.assign(oldTask, data));
     }
+
+    runInAction(() => Object.assign(oldTask, data));
   }
   async updateTask(id: TaskId, task: UpdateTaskRequest) {
     this.updateState.run(() => this.apiUpdateTask(id, task));
+  }
+
+  private async apiMoveTask(id: TaskId, move: TaskMove) {
+    const sourceColumn = this.tasks.find((col) =>
+      col.tasks.some((t) => t.id === id),
+    )!;
+    const destColumn = this.tasks.find((col) => col.id === move.columnId)!;
+    const oldTask = sourceColumn.tasks.find((t) => t.id === id)!;
+
+    const oldTaskCopy = { ...oldTask };
+    const originalIndex = sourceColumn.tasks.indexOf(oldTask);
+
+    const hasLayoutChanged =
+      destColumn.id !== sourceColumn.id || move.targetIndex !== originalIndex;
+    if (!hasLayoutChanged) return;
+
+    // dnd-kit reports targetIndex against the destination list with the
+    // dragged task already removed from its old slot, so we mirror that here
+    const destTasks = destColumn.tasks.filter((t) => t.id !== id);
+    const prevTask = destTasks[move.targetIndex - 1];
+    const nextTask = destTasks[move.targetIndex];
+
+    sourceColumn.tasks.splice(originalIndex, 1);
+    Object.assign(oldTask, { columnId: destColumn.id });
+    destColumn.tasks.splice(move.targetIndex, 0, oldTask);
+
+    const { data, error } = await api.PATCH("/tasks/{id}/move", {
+      params: { path: { id } },
+      body: {
+        columnId: move.columnId,
+        prevId: prevTask?.id,
+        nextId: nextTask?.id,
+      },
+    });
+
+    if (error) {
+      runInAction(() => {
+        Object.assign(oldTask, oldTaskCopy);
+
+        const currentIndex = destColumn.tasks.indexOf(oldTask);
+        destColumn.tasks.splice(currentIndex, 1);
+        sourceColumn.tasks.splice(originalIndex, 0, oldTask);
+      });
+      return error;
+    }
+
+    runInAction(() => Object.assign(oldTask, data));
+  }
+  async moveTask(id: TaskId, move: TaskMove) {
+    this.updateState.run(() => this.apiMoveTask(id, move));
   }
 }
