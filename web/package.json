@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
     "ts-check": "tsc --noEmit",
     "gen-types": "dotenv -e .env -- sh -c 'openapi-typescript $VITE_API_URL/docs.json -o ./src/types/api.ts'"
   },
@@ -45,6 +48,8 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
-    "vite-plugin-babel": "^1.7.3"
+    "vite-plugin-babel": "^1.7.3",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.8"
   }
 }

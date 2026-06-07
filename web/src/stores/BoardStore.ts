@@ -3,6 +3,7 @@ import { RequestState } from "./RequestState";
 import { api } from "@/services/api";
 import type {
   CreateTaskRequest,
+  DeleteTaskRequest,
   GetTasksResponse,
   TaskId,
   UpdateTaskRequest,
@@ -18,6 +19,8 @@ export class BoardStore {
   getAllState = new RequestState();
   createState = new RequestState();
   updateState = new RequestState();
+  moveState = new RequestState();
+  deleteState = new RequestState();
 
   constructor() {
     makeAutoObservable(this);
@@ -30,8 +33,8 @@ export class BoardStore {
 
     runInAction(() => (this.tasks = data));
   }
-  async getAllTasks() {
-    this.getAllState.run(() => this.apiGetAllTasks());
+  getAllTasks() {
+    return this.getAllState.run(() => this.apiGetAllTasks());
   }
 
   private async apiCreateTask(task: CreateTaskRequest) {
@@ -46,8 +49,8 @@ export class BoardStore {
       column.tasks.push(data);
     });
   }
-  async createTask(task: CreateTaskRequest) {
-    this.createState.run(() => this.apiCreateTask(task));
+  createTask(task: CreateTaskRequest) {
+    return this.createState.run(() => this.apiCreateTask(task));
   }
 
   private async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
@@ -71,8 +74,8 @@ export class BoardStore {
 
     runInAction(() => Object.assign(oldTask, data));
   }
-  async updateTask(id: TaskId, task: UpdateTaskRequest) {
-    this.updateState.run(() => this.apiUpdateTask(id, task));
+  updateTask(id: TaskId, task: UpdateTaskRequest) {
+    return this.updateState.run(() => this.apiUpdateTask(id, task));
   }
 
   private async apiMoveTask(id: TaskId, move: TaskMove) {
@@ -80,10 +83,9 @@ export class BoardStore {
       col.tasks.some((t) => t.id === id),
     )!;
     const destColumn = this.tasks.find((col) => col.id === move.columnId)!;
-    const oldTask = sourceColumn.tasks.find((t) => t.id === id)!;
-
+    const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === id);
+    const oldTask = sourceColumn.tasks[originalIndex];
     const oldTaskCopy = { ...oldTask };
-    const originalIndex = sourceColumn.tasks.indexOf(oldTask);
 
     const hasLayoutChanged =
       destColumn.id !== sourceColumn.id || move.targetIndex !== originalIndex;
@@ -121,7 +123,34 @@ export class BoardStore {
 
     runInAction(() => Object.assign(oldTask, data));
   }
-  async moveTask(id: TaskId, move: TaskMove) {
-    this.updateState.run(() => this.apiMoveTask(id, move));
+  moveTask(id: TaskId, move: TaskMove) {
+    return this.moveState.run(() => this.apiMoveTask(id, move));
+  }
+
+  private async apiDeleteTask(task: DeleteTaskRequest) {
+    const sourceColumn = this.tasks.find((col) => col.id === task.columnId)!;
+    const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === task.id);
+    if (originalIndex === -1) {
+      return {
+        code: "TASK_NOT_EXIST",
+        message: "task doesn't exist with that id",
+      };
+    }
+    const [removedTask] = sourceColumn.tasks.splice(originalIndex, 1);
+
+    const { error } = await api.DELETE("/tasks/{id}", {
+      params: { path: { id: task.id } },
+    });
+
+    if (error) {
+      runInAction(() => {
+        sourceColumn.tasks.splice(originalIndex, 0, removedTask);
+      });
+      return error;
+    }
+  }
+
+  deleteTask(task: DeleteTaskRequest) {
+    return this.deleteState.run(() => this.apiDeleteTask(task));
   }
 }
