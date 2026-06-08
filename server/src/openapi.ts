@@ -13,5 +13,6 @@ export function getOpenApiDocumentation() {
   return generator.generateDocument({
     openapi: "3.0.0",
     info: { title: "Kanban Board API", version: "1.0.0" },
+    servers: [{ url: "/api" }],
   });
 }

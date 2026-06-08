@@ -83,10 +83,6 @@ const App = observer(() => {
     return <p>Loading...</p>;
   }
 
-  if (BoardStore.getAllState.error) {
-    return <p>Error: {BoardStore.getAllState.error.message}</p>;
-  }
-
   return (
     <DragDropProvider
       onDragStart={handleDragStart}
