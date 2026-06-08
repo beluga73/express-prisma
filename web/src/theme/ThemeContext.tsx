@@ -7,6 +7,7 @@ import {
 } from "react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
+import { Toaster } from "sonner";
 import { getThemeOptions } from "./theme";
 
 type ThemeContextType = {
@@ -28,6 +29,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     <ThemeContext.Provider value={{ mode, toggleTheme }}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
+        <Toaster theme={mode} richColors closeButton position="bottom-right" />
         {children}
       </MuiThemeProvider>
     </ThemeContext.Provider>

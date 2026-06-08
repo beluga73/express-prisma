@@ -10,6 +10,8 @@ export default defineConfig({
     },
   },
   plugins: [
+    // I needed it for mobx decorators as esbuild wasn't transpiling them
+    // I don't use decorators anymore, check if could be safely removed
     babel({
       include: /\.ts$/,
       babelConfig: {
