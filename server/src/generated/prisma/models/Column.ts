@@ -40,18 +40,21 @@ export type ColumnMinAggregateOutputType = {
   id: number | null
   title: string | null
   position: number | null
+  userId: string | null
 }
 
 export type ColumnMaxAggregateOutputType = {
   id: number | null
   title: string | null
   position: number | null
+  userId: string | null
 }
 
 export type ColumnCountAggregateOutputType = {
   id: number
   title: number
   position: number
+  userId: number
   _all: number
 }
 
@@ -70,18 +73,21 @@ export type ColumnMinAggregateInputType = {
   id?: true
   title?: true
   position?: true
+  userId?: true
 }
 
 export type ColumnMaxAggregateInputType = {
   id?: true
   title?: true
   position?: true
+  userId?: true
 }
 
 export type ColumnCountAggregateInputType = {
   id?: true
   title?: true
   position?: true
+  userId?: true
   _all?: true
 }
 
@@ -175,6 +181,7 @@ export type ColumnGroupByOutputType = {
   id: number
   title: string
   position: number
+  userId: string
   _count: ColumnCountAggregateOutputType | null
   _avg: ColumnAvgAggregateOutputType | null
   _sum: ColumnSumAggregateOutputType | null
@@ -204,14 +211,18 @@ export type ColumnWhereInput = {
   id?: Prisma.IntFilter<"Column"> | number
   title?: Prisma.StringFilter<"Column"> | string
   position?: Prisma.IntFilter<"Column"> | number
-  tasks?: Prisma.TasksListRelationFilter
+  userId?: Prisma.StringFilter<"Column"> | string
+  tasks?: Prisma.TaskListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type ColumnOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   position?: Prisma.SortOrder
-  tasks?: Prisma.TasksOrderByRelationAggregateInput
+  userId?: Prisma.SortOrder
+  tasks?: Prisma.TaskOrderByRelationAggregateInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ColumnWhereUniqueInput = Prisma.AtLeast<{
@@ -221,13 +232,16 @@ export type ColumnWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ColumnWhereInput | Prisma.ColumnWhereInput[]
   title?: Prisma.StringFilter<"Column"> | string
   position?: Prisma.IntFilter<"Column"> | number
-  tasks?: Prisma.TasksListRelationFilter
+  userId?: Prisma.StringFilter<"Column"> | string
+  tasks?: Prisma.TaskListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type ColumnOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   _count?: Prisma.ColumnCountOrderByAggregateInput
   _avg?: Prisma.ColumnAvgOrderByAggregateInput
   _max?: Prisma.ColumnMaxOrderByAggregateInput
@@ -242,38 +256,44 @@ export type ColumnScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Column"> | number
   title?: Prisma.StringWithAggregatesFilter<"Column"> | string
   position?: Prisma.IntWithAggregatesFilter<"Column"> | number
+  userId?: Prisma.StringWithAggregatesFilter<"Column"> | string
 }
 
 export type ColumnCreateInput = {
   title: string
   position: number
-  tasks?: Prisma.TasksCreateNestedManyWithoutColumnInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutColumnInput
+  user: Prisma.UserCreateNestedOneWithoutColumnsInput
 }
 
 export type ColumnUncheckedCreateInput = {
   id?: number
   title: string
   position: number
-  tasks?: Prisma.TasksUncheckedCreateNestedManyWithoutColumnInput
+  userId: string
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutColumnInput
 }
 
 export type ColumnUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
-  tasks?: Prisma.TasksUpdateManyWithoutColumnNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutColumnNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutColumnsNestedInput
 }
 
 export type ColumnUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
-  tasks?: Prisma.TasksUncheckedUpdateManyWithoutColumnNestedInput
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutColumnNestedInput
 }
 
 export type ColumnCreateManyInput = {
   id?: number
   title: string
   position: number
+  userId: string
 }
 
 export type ColumnUpdateManyMutationInput = {
@@ -285,17 +305,24 @@ export type ColumnUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type ColumnScalarRelationFilter = {
-  is?: Prisma.ColumnWhereInput
-  isNot?: Prisma.ColumnWhereInput
+export type ColumnListRelationFilter = {
+  every?: Prisma.ColumnWhereInput
+  some?: Prisma.ColumnWhereInput
+  none?: Prisma.ColumnWhereInput
+}
+
+export type ColumnOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ColumnCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type ColumnAvgOrderByAggregateInput = {
@@ -307,17 +334,74 @@ export type ColumnMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type ColumnMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type ColumnSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   position?: Prisma.SortOrder
+}
+
+export type ColumnScalarRelationFilter = {
+  is?: Prisma.ColumnWhereInput
+  isNot?: Prisma.ColumnWhereInput
+}
+
+export type ColumnCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput> | Prisma.ColumnCreateWithoutUserInput[] | Prisma.ColumnUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ColumnCreateOrConnectWithoutUserInput | Prisma.ColumnCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ColumnCreateManyUserInputEnvelope
+  connect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+}
+
+export type ColumnUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput> | Prisma.ColumnCreateWithoutUserInput[] | Prisma.ColumnUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ColumnCreateOrConnectWithoutUserInput | Prisma.ColumnCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.ColumnCreateManyUserInputEnvelope
+  connect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+}
+
+export type ColumnUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput> | Prisma.ColumnCreateWithoutUserInput[] | Prisma.ColumnUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ColumnCreateOrConnectWithoutUserInput | Prisma.ColumnCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ColumnUpsertWithWhereUniqueWithoutUserInput | Prisma.ColumnUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ColumnCreateManyUserInputEnvelope
+  set?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  disconnect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  delete?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  connect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  update?: Prisma.ColumnUpdateWithWhereUniqueWithoutUserInput | Prisma.ColumnUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ColumnUpdateManyWithWhereWithoutUserInput | Prisma.ColumnUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ColumnScalarWhereInput | Prisma.ColumnScalarWhereInput[]
+}
+
+export type ColumnUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput> | Prisma.ColumnCreateWithoutUserInput[] | Prisma.ColumnUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.ColumnCreateOrConnectWithoutUserInput | Prisma.ColumnCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.ColumnUpsertWithWhereUniqueWithoutUserInput | Prisma.ColumnUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.ColumnCreateManyUserInputEnvelope
+  set?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  disconnect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  delete?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  connect?: Prisma.ColumnWhereUniqueInput | Prisma.ColumnWhereUniqueInput[]
+  update?: Prisma.ColumnUpdateWithWhereUniqueWithoutUserInput | Prisma.ColumnUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.ColumnUpdateManyWithWhereWithoutUserInput | Prisma.ColumnUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.ColumnScalarWhereInput | Prisma.ColumnScalarWhereInput[]
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type ColumnCreateNestedOneWithoutTasksInput = {
@@ -334,15 +418,66 @@ export type ColumnUpdateOneRequiredWithoutTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ColumnUpdateToOneWithWhereWithoutTasksInput, Prisma.ColumnUpdateWithoutTasksInput>, Prisma.ColumnUncheckedUpdateWithoutTasksInput>
 }
 
+export type ColumnCreateWithoutUserInput = {
+  title: string
+  position: number
+  tasks?: Prisma.TaskCreateNestedManyWithoutColumnInput
+}
+
+export type ColumnUncheckedCreateWithoutUserInput = {
+  id?: number
+  title: string
+  position: number
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutColumnInput
+}
+
+export type ColumnCreateOrConnectWithoutUserInput = {
+  where: Prisma.ColumnWhereUniqueInput
+  create: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput>
+}
+
+export type ColumnCreateManyUserInputEnvelope = {
+  data: Prisma.ColumnCreateManyUserInput | Prisma.ColumnCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type ColumnUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.ColumnWhereUniqueInput
+  update: Prisma.XOR<Prisma.ColumnUpdateWithoutUserInput, Prisma.ColumnUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.ColumnCreateWithoutUserInput, Prisma.ColumnUncheckedCreateWithoutUserInput>
+}
+
+export type ColumnUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.ColumnWhereUniqueInput
+  data: Prisma.XOR<Prisma.ColumnUpdateWithoutUserInput, Prisma.ColumnUncheckedUpdateWithoutUserInput>
+}
+
+export type ColumnUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.ColumnScalarWhereInput
+  data: Prisma.XOR<Prisma.ColumnUpdateManyMutationInput, Prisma.ColumnUncheckedUpdateManyWithoutUserInput>
+}
+
+export type ColumnScalarWhereInput = {
+  AND?: Prisma.ColumnScalarWhereInput | Prisma.ColumnScalarWhereInput[]
+  OR?: Prisma.ColumnScalarWhereInput[]
+  NOT?: Prisma.ColumnScalarWhereInput | Prisma.ColumnScalarWhereInput[]
+  id?: Prisma.IntFilter<"Column"> | number
+  title?: Prisma.StringFilter<"Column"> | string
+  position?: Prisma.IntFilter<"Column"> | number
+  userId?: Prisma.StringFilter<"Column"> | string
+}
+
 export type ColumnCreateWithoutTasksInput = {
   title: string
   position: number
+  user: Prisma.UserCreateNestedOneWithoutColumnsInput
 }
 
 export type ColumnUncheckedCreateWithoutTasksInput = {
   id?: number
   title: string
   position: number
+  userId: string
 }
 
 export type ColumnCreateOrConnectWithoutTasksInput = {
@@ -364,9 +499,36 @@ export type ColumnUpdateToOneWithWhereWithoutTasksInput = {
 export type ColumnUpdateWithoutTasksInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutColumnsNestedInput
 }
 
 export type ColumnUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type ColumnCreateManyUserInput = {
+  id?: number
+  title: string
+  position: number
+}
+
+export type ColumnUpdateWithoutUserInput = {
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  tasks?: Prisma.TaskUpdateManyWithoutColumnNestedInput
+}
+
+export type ColumnUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutColumnNestedInput
+}
+
+export type ColumnUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
@@ -399,7 +561,7 @@ export type ColumnCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
  * ColumnCountOutputType without action
  */
 export type ColumnCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TasksWhereInput
+  where?: Prisma.TaskWhereInput
 }
 
 
@@ -407,7 +569,9 @@ export type ColumnSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   title?: boolean
   position?: boolean
+  userId?: boolean
   tasks?: boolean | Prisma.Column$tasksArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ColumnCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["column"]>
 
@@ -415,37 +579,49 @@ export type ColumnSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   position?: boolean
+  userId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["column"]>
 
 export type ColumnSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   position?: boolean
+  userId?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["column"]>
 
 export type ColumnSelectScalar = {
   id?: boolean
   title?: boolean
   position?: boolean
+  userId?: boolean
 }
 
-export type ColumnOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "position", ExtArgs["result"]["column"]>
+export type ColumnOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "position" | "userId", ExtArgs["result"]["column"]>
 export type ColumnInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tasks?: boolean | Prisma.Column$tasksArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ColumnCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ColumnIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ColumnIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type ColumnIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type ColumnIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $ColumnPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Column"
   objects: {
-    tasks: Prisma.$TasksPayload<ExtArgs>[]
+    tasks: Prisma.$TaskPayload<ExtArgs>[]
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     title: string
     position: number
+    userId: string
   }, ExtArgs["result"]["column"]>
   composites: {}
 }
@@ -840,7 +1016,8 @@ readonly fields: ColumnFieldRefs;
  */
 export interface Prisma__ColumnClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tasks<T extends Prisma.Column$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Column$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TasksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tasks<T extends Prisma.Column$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Column$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -873,6 +1050,7 @@ export interface ColumnFieldRefs {
   readonly id: Prisma.FieldRef<"Column", 'Int'>
   readonly title: Prisma.FieldRef<"Column", 'String'>
   readonly position: Prisma.FieldRef<"Column", 'Int'>
+  readonly userId: Prisma.FieldRef<"Column", 'String'>
 }
     
 
@@ -1127,6 +1305,10 @@ export type ColumnCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    */
   data: Prisma.ColumnCreateManyInput | Prisma.ColumnCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ColumnIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1197,6 +1379,10 @@ export type ColumnUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many Columns to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ColumnIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1270,23 +1456,23 @@ export type ColumnDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
  */
 export type Column$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Tasks
+   * Select specific fields to fetch from the Task
    */
-  select?: Prisma.TasksSelect<ExtArgs> | null
+  select?: Prisma.TaskSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Tasks
+   * Omit specific fields from the Task
    */
-  omit?: Prisma.TasksOmit<ExtArgs> | null
+  omit?: Prisma.TaskOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TasksInclude<ExtArgs> | null
-  where?: Prisma.TasksWhereInput
-  orderBy?: Prisma.TasksOrderByWithRelationInput | Prisma.TasksOrderByWithRelationInput[]
-  cursor?: Prisma.TasksWhereUniqueInput
+  include?: Prisma.TaskInclude<ExtArgs> | null
+  where?: Prisma.TaskWhereInput
+  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
+  cursor?: Prisma.TaskWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TasksScalarFieldEnum | Prisma.TasksScalarFieldEnum[]
+  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
 }
 
 /**

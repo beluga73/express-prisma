@@ -11,6 +11,28 @@ export const VALIDATION_ERROR = {
   },
 };
 
+export const UNAUTHORIZED_ERROR = {
+  401: {
+    description: "Invalid credentials",
+    content: {
+      "application/json": {
+        schema: ErrorSchema,
+      },
+    },
+  },
+};
+
+export const CONFLICT_ERROR = {
+  409: {
+    description: "Resource already exists",
+    content: {
+      "application/json": {
+        schema: ErrorSchema,
+      },
+    },
+  },
+};
+
 export const NOT_FOUND_ERROR = {
   404: {
     description: "Resource not found",

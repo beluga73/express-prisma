@@ -1,4 +1,4 @@
-import { TasksSchema, ColumnSchema } from "@/generated/zod";
+import { TaskSchema, ColumnSchema } from "@/generated/zod";
 import z from "zod";
 import { idParamSchema } from "./common.schema";
 
@@ -7,18 +7,18 @@ export type TaskParams = z.output<typeof TaskParamsSchema>;
 
 export const GetTasksResponseSchema = z.array(
   ColumnSchema.extend({
-    tasks: z.array(TasksSchema),
+    tasks: z.array(TaskSchema),
   }),
 );
 
-export const CreateTaskRequestSchema = TasksSchema.omit({
+export const CreateTaskRequestSchema = TaskSchema.omit({
   id: true,
   position: true,
 });
 export type CreateTaskRequest = z.output<typeof CreateTaskRequestSchema>;
-export const CreateTaskResponseSchema = TasksSchema.openapi("Task");
+export const CreateTaskResponseSchema = TaskSchema.openapi("Task");
 
-export const UpdateTaskRequestSchema = TasksSchema.pick({ title: true });
+export const UpdateTaskRequestSchema = TaskSchema.pick({ title: true });
 export type UpdateTaskRequest = z.output<typeof UpdateTaskRequestSchema>;
 
 export const MoveTaskRequestSchema = z.object({

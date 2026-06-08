@@ -37,7 +37,7 @@ export const taskService = {
     });
   },
   async create(data: CreateTaskRequest) {
-    const lastTaskInColumn = await prisma.tasks.findFirst({
+    const lastTaskInColumn = await prisma.task.findFirst({
       where: { columnId: data.columnId },
       orderBy: {
         position: "desc",
@@ -48,7 +48,7 @@ export const taskService = {
       ? LexoRank.parse(lastTaskInColumn.position).genNext().toString()
       : LexoRank.middle().toString();
 
-    return await prisma.tasks.create({
+    return await prisma.task.create({
       data: {
         ...data,
         position,
@@ -56,7 +56,7 @@ export const taskService = {
     });
   },
   async update(id: TaskParams["id"], data: UpdateTaskRequest) {
-    return await prisma.tasks.update({
+    return await prisma.task.update({
       where: { id },
       data,
     });
@@ -65,19 +65,19 @@ export const taskService = {
     const { columnId, prevId, nextId } = data;
 
     const [prevTask, nextTask] = await Promise.all([
-      prevId ? prisma.tasks.findUnique({ where: { id: prevId } }) : null,
-      nextId ? prisma.tasks.findUnique({ where: { id: nextId } }) : null,
+      prevId ? prisma.task.findUnique({ where: { id: prevId } }) : null,
+      nextId ? prisma.task.findUnique({ where: { id: nextId } }) : null,
     ]);
 
     const position = calculatePosition(prevTask?.position, nextTask?.position);
 
-    return await prisma.tasks.update({
+    return await prisma.task.update({
       where: { id },
       data: { columnId, position },
     });
   },
   async delete(id: TaskParams["id"]) {
-    return await prisma.tasks.delete({
+    return await prisma.task.delete({
       where: { id },
     });
   },

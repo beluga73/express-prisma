@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Tasks'
+export type * from './models/User'
 export type * from './models/Column'
+export type * from './models/Task'
 export type * from './commonInputTypes'

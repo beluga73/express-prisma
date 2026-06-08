@@ -14,17 +14,34 @@ generator zod {
   prismaClientPath = "@/generated/prisma"
 }
 
-model Tasks {
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  refreshToken String?
+  columns      Column[]
+
+  @@map("users")
+}
+
+model Column {
+  id       Int    @id @default(autoincrement())
+  title    String
+  position Int
+  tasks    Task[]
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+
+  @@map("columns")
+}
+
+model Task {
   id       Int    @id @default(autoincrement())
   title    String
   position String
   columnId Int
   column   Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
-}
 
-model Column {
-  id       Int     @id @default(autoincrement())
-  title    String
-  position Int
-  tasks    Tasks[]
+  @@map("tasks")
 }

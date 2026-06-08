@@ -5,7 +5,7 @@ import { AppError, API_ERRORS, type ApiErrorCode } from "@/lib/errors";
 
 const PRISMA_ERROR_MAP: Record<string, ApiErrorCode> = {
   P2025: "TASK_NOT_FOUND", // Record not found
-  // P2002: "DUPLICATE_ENTRY", // Unique constraint violation (add as needed)
+  P2002: "EMAIL_ALREADY_EXISTS", // Unique constraint violation (only `email` is unique today)
 };
 
 export const errorHandler = (

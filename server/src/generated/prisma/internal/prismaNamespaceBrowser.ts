@@ -51,8 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Tasks: 'Tasks',
-  Column: 'Column'
+  User: 'User',
+  Column: 'Column',
+  Task: 'Task'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -71,23 +72,35 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const TasksScalarFieldEnum = {
+export const UserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  refreshToken: 'refreshToken'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const ColumnScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  position: 'position',
+  userId: 'userId'
+} as const
+
+export type ColumnScalarFieldEnum = (typeof ColumnScalarFieldEnum)[keyof typeof ColumnScalarFieldEnum]
+
+
+export const TaskScalarFieldEnum = {
   id: 'id',
   title: 'title',
   position: 'position',
   columnId: 'columnId'
 } as const
 
-export type TasksScalarFieldEnum = (typeof TasksScalarFieldEnum)[keyof typeof TasksScalarFieldEnum]
-
-
-export const ColumnScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  position: 'position'
-} as const
-
-export type ColumnScalarFieldEnum = (typeof ColumnScalarFieldEnum)[keyof typeof ColumnScalarFieldEnum]
+export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -104,4 +117,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

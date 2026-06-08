@@ -19,6 +19,16 @@ export const API_ERRORS = {
     code: "TASK_NOT_FOUND",
     message: "Task not found",
   },
+  INVALID_CREDENTIALS: {
+    status: 401,
+    code: "INVALID_CREDENTIALS",
+    message: "Invalid email or password",
+  },
+  EMAIL_ALREADY_EXISTS: {
+    status: 409,
+    code: "EMAIL_ALREADY_EXISTS",
+    message: "An account with this email already exists",
+  },
   INTERNAL_SERVER_ERROR: {
     status: 500,
     code: "INTERNAL_SERVER_ERROR",
