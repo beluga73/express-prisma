@@ -1,8 +1,9 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import {
   SignUpRequestSchema,
+  SignUpResponseSchema,
   SignInRequestSchema,
-  AuthResponseSchema,
+  SignInResponseSchema,
 } from "@/schemas/auth.schema";
 import {
   VALIDATION_ERROR,
@@ -36,7 +37,7 @@ export const registerAuthDocs = (registry: OpenAPIRegistry) => {
         description: "Account created successfully",
         content: {
           "application/json": {
-            schema: AuthResponseSchema,
+            schema: SignUpResponseSchema,
           },
         },
       },
@@ -69,12 +70,26 @@ export const registerAuthDocs = (registry: OpenAPIRegistry) => {
         description: "Signed in successfully",
         content: {
           "application/json": {
-            schema: AuthResponseSchema,
+            schema: SignInResponseSchema,
           },
         },
       },
       ...VALIDATION_ERROR,
       ...UNAUTHORIZED_ERROR,
+      ...INTERNAL_SERVER_ERROR,
+    },
+  });
+
+  registry.registerPath({
+    method: "post",
+    path: "/auth/logout",
+    summary: "Logs out",
+    request: {},
+    responses: {
+      204: {
+        description: "Logout successfully",
+        content: {},
+      },
       ...INTERNAL_SERVER_ERROR,
     },
   });

@@ -1,6 +1,8 @@
 import { UserSchema } from "@/generated/zod";
 import z from "zod";
 
+export type UserId = z.infer<typeof UserSchema.shape.id>;
+
 export const safeUserSchema = UserSchema.omit({
   passwordHash: true,
   refreshToken: true,
@@ -23,14 +25,20 @@ export const SignUpRequestSchema = UserSchema.pick({
   email: true,
 }).extend({ password: passwordSchema });
 export type SignUpRequest = z.output<typeof SignUpRequestSchema>;
+export const SignUpResponseSchema = z.object({
+  user: safeUserSchema,
+  accessToken: z.string(),
+});
+export type SignUpResponse = z.output<typeof SignUpResponseSchema>;
 
 export const SignInRequestSchema = UserSchema.pick({ email: true }).extend({
   password: passwordSchema,
 });
 export type SignInRequest = z.output<typeof SignInRequestSchema>;
+export const SignInResponseSchema = SignUpResponseSchema;
+export type SignInResponse = SignUpResponse;
 
-export const AuthResponseSchema = z.object({
-  user: safeUserSchema,
-  accessToken: z.string(),
+export const RequestRefreshSchema = z.object({
+  refreshToken: UserSchema.shape.refreshToken.unwrap(),
 });
-export type AuthResponse = z.output<typeof AuthResponseSchema>;
+export type RequestRefresh = z.output<typeof RequestRefreshSchema>;

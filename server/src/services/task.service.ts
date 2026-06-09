@@ -1,5 +1,7 @@
 import { LexoRank } from "lexorank";
 import { prisma } from "../lib/prisma";
+import { AppError } from "@/lib/errors";
+import type { UserId } from "@/schemas/auth.schema";
 import type {
   TaskParams,
   CreateTaskRequest,
@@ -26,8 +28,9 @@ const calculatePosition = (
 };
 
 export const taskService = {
-  async getAll() {
+  async getAll(userId: UserId) {
     return await prisma.column.findMany({
+      where: { userId },
       orderBy: { position: "asc" },
       include: {
         tasks: {
@@ -36,49 +39,49 @@ export const taskService = {
       },
     });
   },
-  async create(data: CreateTaskRequest) {
-    const lastTaskInColumn = await prisma.task.findFirst({
-      where: { columnId: data.columnId },
-      orderBy: {
-        position: "desc",
-      },
+  async create(userId: UserId, data: CreateTaskRequest) {
+    const column = await prisma.column.findFirst({
+      where: { id: data.columnId, userId },
+      include: { tasks: { orderBy: { position: "desc" }, take: 1 } },
     });
+    if (!column) throw new AppError("TASK_NOT_FOUND");
 
-    const position = lastTaskInColumn
-      ? LexoRank.parse(lastTaskInColumn.position).genNext().toString()
+    const position = column.tasks[0]
+      ? LexoRank.parse(column.tasks[0].position).genNext().toString()
       : LexoRank.middle().toString();
 
-    return await prisma.task.create({
-      data: {
-        ...data,
-        position,
-      },
-    });
+    return await prisma.task.create({ data: { ...data, position } });
   },
-  async update(id: TaskParams["id"], data: UpdateTaskRequest) {
-    return await prisma.task.update({
-      where: { id },
+  async update(id: TaskParams["id"], data: UpdateTaskRequest, userId: UserId) {
+    const [task] = await prisma.task.updateManyAndReturn({
+      where: { id, column: { userId } },
       data,
     });
+    if (!task) throw new AppError("TASK_NOT_FOUND");
+    return task;
   },
-  async move(id: TaskParams["id"], data: MoveTaskRequest) {
+  async move(id: TaskParams["id"], data: MoveTaskRequest, userId: UserId) {
     const { columnId, prevId, nextId } = data;
 
-    const [prevTask, nextTask] = await Promise.all([
+    const [task, prevTask, nextTask] = await Promise.all([
+      prisma.task.findFirst({ where: { id, column: { userId } } }),
       prevId ? prisma.task.findUnique({ where: { id: prevId } }) : null,
       nextId ? prisma.task.findUnique({ where: { id: nextId } }) : null,
     ]);
+    if (!task) throw new AppError("TASK_NOT_FOUND");
 
     const position = calculatePosition(prevTask?.position, nextTask?.position);
 
-    return await prisma.task.update({
+    const [moved] = await prisma.task.updateManyAndReturn({
       where: { id },
       data: { columnId, position },
     });
+    return moved;
   },
-  async delete(id: TaskParams["id"]) {
-    return await prisma.task.delete({
-      where: { id },
+  async delete(id: TaskParams["id"], userId: UserId) {
+    const { count } = await prisma.task.deleteMany({
+      where: { id, column: { userId } },
     });
+    if (count === 0) throw new AppError("TASK_NOT_FOUND");
   },
 };

@@ -2,7 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { authUtils } from "@/lib/auth";
 import { AppError } from "@/lib/errors";
-import type { SignInRequest, SignUpRequest } from "@/schemas/auth.schema";
+import type {
+  RequestRefresh,
+  SignInRequest,
+  SignUpRequest,
+} from "@/schemas/auth.schema";
 
 export const authService = {
   async signUp({ name, email, password }: SignUpRequest) {
@@ -43,5 +47,27 @@ export const authService = {
     });
 
     return { user: newUser, accessToken, refreshToken };
+  },
+  async refresh({ refreshToken }: RequestRefresh) {
+    let userId: string;
+    try {
+      ({ userId } = authUtils.verifyRefreshToken(refreshToken));
+    } catch {
+      throw new AppError("UNAUTHORIZED");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new AppError("FORBIDDEN");
+    }
+
+    const accessToken = authUtils.generateAccessToken(userId);
+
+    return accessToken;
   },
 };
