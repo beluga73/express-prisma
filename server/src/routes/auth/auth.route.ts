@@ -4,7 +4,7 @@ import {
 } from "@/constants/auth";
 import { AppError } from "@/lib/errors";
 import {
-  RequestRefreshSchema,
+  RefreshRequestSchema,
   safeUserSchema,
   SignInRequestSchema,
   SignUpRequestSchema,
@@ -40,7 +40,7 @@ router.post("/logout", async (req, res) => {
 
 router.post("/refresh", async (req, res) => {
   // use safeParse not to show zod error if validation fails
-  const { success, data } = RequestRefreshSchema.safeParse(req.signedCookies);
+  const { success, data } = RefreshRequestSchema.safeParse(req.signedCookies);
   if (!success) {
     throw new AppError("FORBIDDEN");
   }

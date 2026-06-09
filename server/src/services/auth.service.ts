@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { authUtils } from "@/lib/auth";
 import { AppError } from "@/lib/errors";
 import type {
-  RequestRefresh,
+  RefreshRequest,
   SignInRequest,
   SignUpRequest,
 } from "@/schemas/auth.schema";
@@ -48,7 +48,7 @@ export const authService = {
 
     return { user: newUser, accessToken, refreshToken };
   },
-  async refresh({ refreshToken }: RequestRefresh) {
+  async refresh({ refreshToken }: RefreshRequest) {
     let userId: string;
     try {
       ({ userId } = authUtils.verifyRefreshToken(refreshToken));

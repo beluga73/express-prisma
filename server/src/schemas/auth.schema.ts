@@ -38,7 +38,10 @@ export type SignInRequest = z.output<typeof SignInRequestSchema>;
 export const SignInResponseSchema = SignUpResponseSchema;
 export type SignInResponse = SignUpResponse;
 
-export const RequestRefreshSchema = z.object({
+export const RefreshRequestSchema = z.object({
   refreshToken: UserSchema.shape.refreshToken.unwrap(),
 });
-export type RequestRefresh = z.output<typeof RequestRefreshSchema>;
+export type RefreshRequest = z.output<typeof RefreshRequestSchema>;
+
+export const RefreshResponseSchema = z.object({ accessToken: z.string() });
+export type RefreshResponse = z.output<typeof RefreshResponseSchema>;

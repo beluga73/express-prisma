@@ -157,19 +157,9 @@ export const registerTaskDocs = (registry: OpenAPIRegistry) => {
       params: TaskParamsSchema,
     },
     responses: {
-      200: {
+      204: {
         description: "Task deleted successfully",
-        content: {
-          "application/json": {
-            schema: CreateTaskResponseSchema,
-            example: {
-              id: 1,
-              title: "Fix login bug",
-              position: "0|10000:",
-              columnId: 1,
-            },
-          },
-        },
+        content: {},
       },
       ...NOT_FOUND_ERROR,
       ...INTERNAL_SERVER_ERROR,

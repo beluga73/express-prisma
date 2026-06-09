@@ -4,6 +4,7 @@ import {
   SignUpResponseSchema,
   SignInRequestSchema,
   SignInResponseSchema,
+  RefreshResponseSchema,
 } from "@/schemas/auth.schema";
 import {
   VALIDATION_ERROR,
@@ -82,12 +83,32 @@ export const registerAuthDocs = (registry: OpenAPIRegistry) => {
 
   registry.registerPath({
     method: "post",
+    path: "/auth/refresh",
+    summary: "Refresh access token",
+    description: "Reads the refresh token from the signed httpOnly cookie set at sign-in.",
+    request: {},
+    responses: {
+      200: {
+        description: "New access token issued",
+        content: {
+          "application/json": {
+            schema: RefreshResponseSchema,
+          },
+        },
+      },
+      ...UNAUTHORIZED_ERROR,
+      ...INTERNAL_SERVER_ERROR,
+    },
+  });
+
+  registry.registerPath({
+    method: "post",
     path: "/auth/logout",
-    summary: "Logs out",
+    summary: "Log out",
     request: {},
     responses: {
       204: {
-        description: "Logout successfully",
+        description: "Logged out successfully",
         content: {},
       },
       ...INTERNAL_SERVER_ERROR,
