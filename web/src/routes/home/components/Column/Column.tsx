@@ -25,13 +25,13 @@ export const Column = observer(({ column }: Props) => {
     data: { columnId: column.id },
   });
 
-  const { BoardStore } = useStores();
+  const { boardStore } = useStores();
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState("");
 
   const handleSubmit = async () => {
     if (!title.trim()) return;
-    await BoardStore.createTask({ title: title.trim(), columnId: column.id });
+    await boardStore.createTask({ title: title.trim(), columnId: column.id });
     setTitle("");
     setAdding(false);
   };
@@ -79,6 +79,9 @@ export const Column = observer(({ column }: Props) => {
         {column.tasks.map((task, index) => (
           <TaskCard key={task.id} task={task} index={index} />
         ))}
+        {/* Always-present empty space so there's a non-card drop target for
+            cross-column drag-over even when the column is full of cards. */}
+        <Box sx={{ flex: 1, minHeight: 48 }} />
       </Stack>
 
       {adding ? (
@@ -100,7 +103,7 @@ export const Column = observer(({ column }: Props) => {
               size="small"
               variant="contained"
               onClick={handleSubmit}
-              disabled={!title.trim() || BoardStore.createState.loading}
+              disabled={!title.trim() || boardStore.createState.loading}
             >
               Add
             </Button>

@@ -10,7 +10,10 @@ export class RequestState {
     makeAutoObservable(this);
   }
 
-  async run(asyncFn: () => Promise<ApiError | undefined>) {
+  async run(
+    asyncFn: () => Promise<ApiError | undefined>,
+    options?: { silent?: boolean },
+  ) {
     this.loading = true;
     this.error = null;
 
@@ -18,12 +21,12 @@ export class RequestState {
       const error = await asyncFn();
       if (error) {
         runInAction(() => (this.error = error));
-        handleError(error);
+        if (!options?.silent) handleError(error);
       }
     } catch {
       const error: ApiError = { code: "NETWORK_ERROR", message: ERRORS.NETWORK_ERROR.message };
       runInAction(() => (this.error = error));
-      handleError(error);
+      if (!options?.silent) handleError(error);
     } finally {
       runInAction(() => (this.loading = false));
     }

@@ -4,8 +4,6 @@ declare global {
       userId?: string;
     }
   }
-
-  type AuthenticatedRequest = import("express").Request & { userId: string };
 }
 
 export {};

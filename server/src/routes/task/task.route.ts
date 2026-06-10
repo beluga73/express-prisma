@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { taskService } from "@/services/task.service";
+import { getUserId } from "@/middlewares";
 import {
   TaskParamsSchema,
   CreateTaskRequestSchema,
@@ -10,20 +11,20 @@ import {
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const allTasks = await taskService.getAll(userId);
   res.json(allTasks);
 });
 
 router.post("/", async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const data = CreateTaskRequestSchema.parse(req.body);
   const newTask = await taskService.create(userId, data);
   res.status(201).json(newTask);
 });
 
 router.patch("/:id", async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const { id } = TaskParamsSchema.parse(req.params);
   const data = UpdateTaskRequestSchema.parse(req.body);
   const task = await taskService.update(id, data, userId);
@@ -31,7 +32,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 router.patch("/:id/move", async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const { id } = TaskParamsSchema.parse(req.params);
   const data = MoveTaskRequestSchema.parse(req.body);
   const task = await taskService.move(id, data, userId);
@@ -39,7 +40,7 @@ router.patch("/:id/move", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const { id } = TaskParamsSchema.parse(req.params);
   await taskService.delete(id, userId);
   res.status(204).send();

@@ -26,3 +26,14 @@ export const requireAuth = (
 
   next();
 };
+
+// requireAuth guarantees req.userId is set, but Express's Request type still
+// marks it optional since the middleware can't change the type of req for
+// later handlers. This narrows it back to string in one place instead of
+// `req as AuthenticatedRequest` casts scattered across every route.
+export const getUserId = (req: Request): string => {
+  if (!req.userId) {
+    throw new AppError("UNAUTHORIZED");
+  }
+  return req.userId;
+};

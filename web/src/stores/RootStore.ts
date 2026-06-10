@@ -3,12 +3,12 @@ import { BoardStore } from "./BoardStore";
 
 export class RootStore {
   authStore = new AuthStore();
-  BoardStore = new BoardStore();
+  boardStore = new BoardStore();
 
   getStores() {
     return {
       authStore: this.authStore,
-      BoardStore: this.BoardStore,
+      boardStore: this.boardStore,
     };
   }
 }

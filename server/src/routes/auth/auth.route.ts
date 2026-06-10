@@ -10,7 +10,7 @@ import {
   SignUpRequestSchema,
 } from "@/schemas/auth.schema";
 import { authService } from "@/services/auth.service";
-import { requireAuth } from "@/middlewares/auth.middleware";
+import { requireAuth, getUserId } from "@/middlewares/auth.middleware";
 import { Router } from "express";
 
 const router = Router();
@@ -34,13 +34,15 @@ router.post("/sign-in", async (req, res) => {
   res.status(200).json({ user: parsedUser, accessToken });
 });
 
-router.post("/logout", async (req, res) => {
+router.post("/logout", requireAuth, async (req, res) => {
+  const userId = getUserId(req);
+  await authService.logout(userId);
   res.clearCookie(REFRESH_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE_OPTIONS);
   res.status(204).send();
 });
 
 router.get("/me", requireAuth, async (req, res) => {
-  const { userId } = req as AuthenticatedRequest;
+  const userId = getUserId(req);
   const user = await authService.me(userId);
   const parsedUser = safeUserSchema.parse(user);
 

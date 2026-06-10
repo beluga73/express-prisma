@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const TaskCard = observer(({ task, index }: Props) => {
-  const { BoardStore } = useStores();
+  const { boardStore } = useStores();
   const { ref, handleRef, isDragging } = useSortable({
     id: task.id,
     index,
@@ -41,7 +41,7 @@ export const TaskCard = observer(({ task, index }: Props) => {
         size="small"
         aria-label="Delete task"
         onPointerDownCapture={(e) => e.stopPropagation()}
-        onClick={() => BoardStore.deleteTask(task)}
+        onClick={() => boardStore.deleteTask(task)}
         sx={{
           position: "absolute",
           top: 4,

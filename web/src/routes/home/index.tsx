@@ -14,12 +14,12 @@ import type { Task } from "@/types/schema";
 import { Profile } from "@/components/Profile";
 
 const Home = observer(() => {
-  const { BoardStore } = useStores();
+  const { boardStore } = useStores();
   const [draggedTask, setDraggedTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    BoardStore.getAllTasks();
-  }, [BoardStore]);
+    boardStore.getAllTasks();
+  }, [boardStore]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = event.operation.source?.data as Task | undefined;
@@ -38,7 +38,7 @@ const Home = observer(() => {
     // OptimisticSortingPlugin physically relocates the dragged DOM node into the
     // target column's container while hovering over a different column. That move
     // happens outside React's view of the DOM and conflicts with the re-render we
-    // trigger from BoardStore.moveTask once the drop completes ("removeChild: not
+    // trigger from boardStore.moveTask once the drop completes ("removeChild: not
     // a child of this node"). Same-column reordering is fine — it only repositions
     // siblings within a container React already owns — so we only block the
     // cross-column relocation by marking the event as handled.
@@ -64,22 +64,22 @@ const Home = observer(() => {
       if (targetIndex === initialIndex && targetColumnId === sourceColumnId)
         return;
 
-      BoardStore.moveTask(taskId, { columnId: targetColumnId, targetIndex });
+      boardStore.moveTask(taskId, { columnId: targetColumnId, targetIndex });
     } else {
       // Dropped onto a column container (empty column or column background)
       const targetColumnId = operation.target.id as number;
-      const targetColumn = BoardStore.columns.find(
+      const targetColumn = boardStore.columns.find(
         (col) => col.id === targetColumnId,
       );
 
-      BoardStore.moveTask(taskId, {
+      boardStore.moveTask(taskId, {
         columnId: targetColumnId,
         targetIndex: targetColumn?.tasks.length ?? 0,
       });
     }
   };
 
-  if (BoardStore.getAllState.loading) {
+  if (boardStore.getAllState.loading) {
     return <p>Loading...</p>;
   }
 
@@ -108,7 +108,7 @@ const Home = observer(() => {
         }}
       >
         <Box sx={{ display: "flex", gap: 1 }}>
-          {BoardStore.columns.map((column) => (
+          {boardStore.columns.map((column) => (
             <Column key={column.id} column={column} />
           ))}
         </Box>

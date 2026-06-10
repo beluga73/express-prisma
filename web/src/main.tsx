@@ -8,6 +8,7 @@ import { StoresContext } from "@/stores/StoresContext";
 import { ThemeProvider } from "@/theme/ThemeContext";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { GuestRoute } from "@/components/GuestRoute";
 import { AppLoader } from "@/components/AppLoader";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -29,8 +30,22 @@ function Main() {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/sign-in" element={<SignIn />} />
+                <Route
+                  path="/sign-up"
+                  element={
+                    <GuestRoute>
+                      <SignUp />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="/sign-in"
+                  element={
+                    <GuestRoute>
+                      <SignIn />
+                    </GuestRoute>
+                  }
+                />
               </Routes>
             </BrowserRouter>
           </AppLoader>

@@ -6,11 +6,12 @@ import { taskRouter, authRouter } from "./routes";
 import { requireAuth, errorHandler } from "./middlewares";
 import swaggerUi from "swagger-ui-express";
 import { getOpenApiDocumentation } from "./openapi";
+import { env } from "./lib/env";
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(cookieParser(env.COOKIE_SECRET));
 app.use(express.json());
 
 const spec = getOpenApiDocumentation();

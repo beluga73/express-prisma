@@ -45,7 +45,12 @@ export class AuthStore {
   }
 
   async refreshSession() {
-    await this.refreshState.run(() => this.apiRefreshSession());
+    // Runs once on app load to silently restore a session from the refresh
+    // cookie. A logged-out visitor will always "fail" this check, so it
+    // shouldn't surface as a "Session expired" toast.
+    await this.refreshState.run(() => this.apiRefreshSession(), {
+      silent: true,
+    });
     runInAction(() => (this.initialized = true));
   }
 

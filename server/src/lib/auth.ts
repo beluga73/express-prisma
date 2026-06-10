@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { env } from "./env";
+import { REFRESH_TOKEN_TTL_SECONDS } from "@/constants/auth";
 
-const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
+const ACCESS_SECRET = env.JWT_ACCESS_SECRET;
+const REFRESH_SECRET = env.JWT_REFRESH_SECRET;
 
 export const authUtils = {
   // --- Password Hashing ---
@@ -20,7 +22,9 @@ export const authUtils = {
   },
 
   generateRefreshToken: (userId: string): string => {
-    return jwt.sign({ userId }, REFRESH_SECRET, { expiresIn: "7d" });
+    return jwt.sign({ userId }, REFRESH_SECRET, {
+      expiresIn: REFRESH_TOKEN_TTL_SECONDS,
+    });
   },
 
   // --- JWT Verification ---

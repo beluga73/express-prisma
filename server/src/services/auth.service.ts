@@ -57,6 +57,14 @@ export const authService = {
 
     return { user: newUser, accessToken, refreshToken };
   },
+  async logout(userId: UserId) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        refreshToken: null,
+      },
+    });
+  },
   async me(userId: UserId) {
     const user = await prisma.user.findUnique({
       where: { id: userId },

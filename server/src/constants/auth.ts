@@ -1,3 +1,5 @@
+export const REFRESH_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
+
 export const REFRESH_TOKEN_COOKIE = "refreshToken";
 
 export const REFRESH_TOKEN_COOKIE_OPTIONS = {
@@ -5,5 +7,5 @@ export const REFRESH_TOKEN_COOKIE_OPTIONS = {
   secure: true,
   signed: true,
   sameSite: "strict" as const,
-  maxAge: 30 * 24 * 60 * 60 * 1000,
+  maxAge: REFRESH_TOKEN_TTL_SECONDS * 1000,
 };

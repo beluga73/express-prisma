@@ -37,6 +37,13 @@ export class BoardStore {
     return this.getAllState.run(() => this.apiGetAllTasks());
   }
 
+  // Local board state can drift from the server (stale tab, concurrent
+  // session, etc.). When that happens mid-action, refetch instead of
+  // crashing on a missing column/task.
+  private resync() {
+    void this.getAllTasks();
+  }
+
   private async apiCreateTask(task: CreateTaskRequest) {
     const { data, error } = await api.POST("/tasks", {
       body: task,
@@ -45,7 +52,11 @@ export class BoardStore {
     if (error) return error;
 
     runInAction(() => {
-      const column = this.columns.find((column) => column.id === data.columnId)!;
+      const column = this.columns.find((column) => column.id === data.columnId);
+      if (!column) {
+        this.resync();
+        return;
+      }
       column.tasks.push(data);
     });
   }
@@ -56,8 +67,12 @@ export class BoardStore {
   private async apiUpdateTask(id: TaskId, task: UpdateTaskRequest) {
     const sourceColumn = this.columns.find((col) =>
       col.tasks.some((t) => t.id === id),
-    )!;
-    const oldTask = sourceColumn.tasks.find((t) => t.id === id)!;
+    );
+    const oldTask = sourceColumn?.tasks.find((t) => t.id === id);
+    if (!sourceColumn || !oldTask) {
+      this.resync();
+      return;
+    }
     const oldTaskCopy = { ...oldTask };
 
     Object.assign(oldTask, task);
@@ -81,8 +96,12 @@ export class BoardStore {
   private async apiMoveTask(id: TaskId, move: TaskMove) {
     const sourceColumn = this.columns.find((col) =>
       col.tasks.some((t) => t.id === id),
-    )!;
-    const destColumn = this.columns.find((col) => col.id === move.columnId)!;
+    );
+    const destColumn = this.columns.find((col) => col.id === move.columnId);
+    if (!sourceColumn || !destColumn) {
+      this.resync();
+      return;
+    }
     const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === id);
     const oldTask = sourceColumn.tasks[originalIndex];
     const oldTaskCopy = { ...oldTask };
@@ -128,13 +147,12 @@ export class BoardStore {
   }
 
   private async apiDeleteTask(task: DeleteTaskRequest) {
-    const sourceColumn = this.columns.find((col) => col.id === task.columnId)!;
-    const originalIndex = sourceColumn.tasks.findIndex((t) => t.id === task.id);
-    if (originalIndex === -1) {
-      return {
-        code: "TASK_NOT_EXIST",
-        message: "task doesn't exist with that id",
-      };
+    const sourceColumn = this.columns.find((col) => col.id === task.columnId);
+    const originalIndex =
+      sourceColumn?.tasks.findIndex((t) => t.id === task.id) ?? -1;
+    if (!sourceColumn || originalIndex === -1) {
+      this.resync();
+      return;
     }
     const [removedTask] = sourceColumn.tasks.splice(originalIndex, 1);
 

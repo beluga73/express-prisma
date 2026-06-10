@@ -63,12 +63,13 @@ export const taskService = {
   async move(id: TaskParams["id"], data: MoveTaskRequest, userId: UserId) {
     const { columnId, prevId, nextId } = data;
 
-    const [task, prevTask, nextTask] = await Promise.all([
+    const [task, column, prevTask, nextTask] = await Promise.all([
       prisma.task.findFirst({ where: { id, column: { userId } } }),
+      prisma.column.findFirst({ where: { id: columnId, userId } }),
       prevId ? prisma.task.findUnique({ where: { id: prevId } }) : null,
       nextId ? prisma.task.findUnique({ where: { id: nextId } }) : null,
     ]);
-    if (!task) throw new AppError("TASK_NOT_FOUND");
+    if (!task || !column) throw new AppError("TASK_NOT_FOUND");
 
     const position = calculatePosition(prevTask?.position, nextTask?.position);
 
