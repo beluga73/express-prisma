@@ -6,6 +6,7 @@ import type {
   RefreshRequest,
   SignInRequest,
   SignUpRequest,
+  UserId,
 } from "@/schemas/auth.schema";
 
 export const authService = {
@@ -48,6 +49,17 @@ export const authService = {
 
     return { user: newUser, accessToken, refreshToken };
   },
+  async me(userId: UserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new AppError("UNAUTHORIZED");
+    }
+
+    return user;
+  },
   async refresh({ refreshToken }: RefreshRequest) {
     let userId: string;
     try {
@@ -68,6 +80,6 @@ export const authService = {
 
     const accessToken = authUtils.generateAccessToken(userId);
 
-    return accessToken;
+    return { user, accessToken };
   },
 };

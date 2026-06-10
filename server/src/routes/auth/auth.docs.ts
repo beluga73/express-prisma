@@ -5,6 +5,7 @@ import {
   SignInRequestSchema,
   SignInResponseSchema,
   RefreshResponseSchema,
+  MeResponseSchema,
 } from "@/schemas/auth.schema";
 import {
   VALIDATION_ERROR,
@@ -76,6 +77,26 @@ export const registerAuthDocs = (registry: OpenAPIRegistry) => {
         },
       },
       ...VALIDATION_ERROR,
+      ...UNAUTHORIZED_ERROR,
+      ...INTERNAL_SERVER_ERROR,
+    },
+  });
+
+  registry.registerPath({
+    method: "get",
+    path: "/auth/me",
+    summary: "Get the current user",
+    description: "Returns the authenticated user. Requires a valid access token.",
+    request: {},
+    responses: {
+      200: {
+        description: "Current user",
+        content: {
+          "application/json": {
+            schema: MeResponseSchema,
+          },
+        },
+      },
       ...UNAUTHORIZED_ERROR,
       ...INTERNAL_SERVER_ERROR,
     },

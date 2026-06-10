@@ -43,5 +43,11 @@ export const RefreshRequestSchema = z.object({
 });
 export type RefreshRequest = z.output<typeof RefreshRequestSchema>;
 
-export const RefreshResponseSchema = z.object({ accessToken: z.string() });
+export const RefreshResponseSchema = z.object({
+  user: safeUserSchema,
+  accessToken: z.string(),
+});
 export type RefreshResponse = z.output<typeof RefreshResponseSchema>;
+
+export const MeResponseSchema = safeUserSchema;
+export type MeResponse = z.output<typeof MeResponseSchema>;

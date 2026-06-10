@@ -34,14 +34,19 @@ export type MoveTaskResponse = Exclude<
   undefined
 >["content"]["application/json"];
 
-// DELETE /tasks/{id}
-export type DeleteTaskRequest = Exclude<
-  paths["/tasks/{id}"]["delete"]["responses"]["200"],
-  undefined
->["content"]["application/json"];
+// GET /auth/me
+export type User =
+  paths["/auth/me"]["get"]["responses"]["200"]["content"]["application/json"];
+
+// POST /auth/refresh
+export type RefreshResponse =
+  paths["/auth/refresh"]["post"]["responses"]["200"]["content"]["application/json"];
 
 // Component schemas
 export type Task = components["schemas"]["Task"];
+
+// DELETE /tasks/{id}
+export type DeleteTaskRequest = Pick<Task, "id" | "columnId">;
 export type Column = GetTasksResponse[number];
 
 // Params

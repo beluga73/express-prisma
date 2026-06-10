@@ -10,6 +10,7 @@ import {
   SignUpRequestSchema,
 } from "@/schemas/auth.schema";
 import { authService } from "@/services/auth.service";
+import { requireAuth } from "@/middlewares/auth.middleware";
 import { Router } from "express";
 
 const router = Router();
@@ -38,6 +39,14 @@ router.post("/logout", async (req, res) => {
   res.status(204).send();
 });
 
+router.get("/me", requireAuth, async (req, res) => {
+  const { userId } = req as AuthenticatedRequest;
+  const user = await authService.me(userId);
+  const parsedUser = safeUserSchema.parse(user);
+
+  res.json(parsedUser);
+});
+
 router.post("/refresh", async (req, res) => {
   // use safeParse not to show zod error if validation fails
   const { success, data } = RefreshRequestSchema.safeParse(req.signedCookies);
@@ -45,9 +54,10 @@ router.post("/refresh", async (req, res) => {
     throw new AppError("FORBIDDEN");
   }
 
-  const accessToken = await authService.refresh(data);
+  const { user, accessToken } = await authService.refresh(data);
+  const parsedUser = safeUserSchema.parse(user);
 
-  res.json({ accessToken });
+  res.json({ user: parsedUser, accessToken });
 });
 
 export { router };
