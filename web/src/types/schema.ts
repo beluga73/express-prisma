@@ -34,6 +34,16 @@ export type MoveTaskResponse = Exclude<
   undefined
 >["content"]["application/json"];
 
+// POST /auth/sign-up
+export type SignUpRequest = Exclude<
+  paths["/auth/sign-up"]["post"]["requestBody"],
+  undefined
+>["content"]["application/json"];
+export type SignUpResponse = Exclude<
+  paths["/auth/sign-up"]["post"]["responses"]["201"],
+  undefined
+>["content"]["application/json"];
+
 // GET /auth/me
 export type User =
   paths["/auth/me"]["get"]["responses"]["200"]["content"]["application/json"];

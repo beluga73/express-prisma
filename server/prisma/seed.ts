@@ -1,22 +1,19 @@
 import { prisma } from "../src/lib/prisma.js";
+import { authUtils } from "../src/lib/auth.js";
+import { DEFAULT_COLUMNS } from "../src/constants/columns.js";
 
 async function main() {
-  await prisma.column.upsert({
-    where: { id: 1 },
-    update: {},
-    create: { id: 1, title: "TODO", position: 0 },
-  });
+  const passwordHash = await authUtils.hashPassword("Password123!");
 
-  await prisma.column.upsert({
-    where: { id: 2 },
+  await prisma.user.upsert({
+    where: { email: "test@example.com" },
     update: {},
-    create: { id: 2, title: "IN_PROGRESS", position: 1 },
-  });
-
-  await prisma.column.upsert({
-    where: { id: 3 },
-    update: {},
-    create: { id: 3, title: "DONE", position: 2 },
+    create: {
+      name: "Test User",
+      email: "test@example.com",
+      passwordHash,
+      columns: { create: DEFAULT_COLUMNS },
+    },
   });
 }
 

@@ -23,6 +23,11 @@ export const ERRORS = {
     message: "Task not found",
     strategy: "toast",
   },
+  EMAIL_ALREADY_EXISTS: {
+    message: "An account with this email already exists",
+    // shown inline on the sign-up form's email field instead
+    strategy: "silent",
+  },
   INTERNAL_SERVER_ERROR: {
     message: "Something went wrong on our end",
     strategy: "toast",

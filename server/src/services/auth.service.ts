@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { authUtils } from "@/lib/auth";
 import { AppError } from "@/lib/errors";
+import { DEFAULT_COLUMNS } from "@/constants/columns";
 import type {
   RefreshRequest,
   SignInRequest,
@@ -17,7 +18,14 @@ export const authService = {
     const refreshToken = authUtils.generateRefreshToken(userId);
 
     const user = await prisma.user.create({
-      data: { id: userId, name, email, passwordHash, refreshToken },
+      data: {
+        id: userId,
+        name,
+        email,
+        passwordHash,
+        refreshToken,
+        columns: { create: DEFAULT_COLUMNS },
+      },
     });
 
     return { user, accessToken, refreshToken };

@@ -1,4 +1,4 @@
-import type { User } from "@/types/schema";
+import type { SignUpRequest, User } from "@/types/schema";
 import { makeAutoObservable, runInAction } from "mobx";
 import { api } from "@/services/api";
 import { RequestState } from "./RequestState";
@@ -6,6 +6,7 @@ import { RequestState } from "./RequestState";
 export class AuthStore {
   user: User | null = null;
   accessToken: string | null = null;
+  signUpState = new RequestState();
   refreshState = new RequestState();
   meState = new RequestState();
 
@@ -50,5 +51,23 @@ export class AuthStore {
 
   fetchUser() {
     return this.meState.run(() => this.apiFetchUser());
+  }
+
+  private async apiSignUp(signUpData: SignUpRequest) {
+    const { data, error } = await api.POST("/auth/sign-up", {
+      body: signUpData,
+      credentials: "include",
+    });
+
+    if (error) return error;
+
+    runInAction(() => {
+      this.accessToken = data.accessToken;
+      this.user = data.user;
+    });
+  }
+
+  signUp(signUpData: SignUpRequest) {
+    return this.signUpState.run(() => this.apiSignUp(signUpData));
   }
 }
