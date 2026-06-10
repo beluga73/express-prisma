@@ -11,8 +11,9 @@ import type {
 } from "@dnd-kit/react";
 import { isSortableOperation } from "@dnd-kit/react/sortable";
 import type { Task } from "@/types/schema";
+import { Profile } from "@/components/Profile";
 
-const App = observer(() => {
+const Home = observer(() => {
   const { BoardStore } = useStores();
   const [draggedTask, setDraggedTask] = useState<Task | null>(null);
 
@@ -54,7 +55,6 @@ const App = observer(() => {
 
     const taskId = operation.source.id as number;
     const sourceColumnId = operation.source.initialGroup as number;
-    console.log(sourceColumnId);
     const initialIndex = operation.source.initialIndex as number;
 
     if (isSortableOperation(operation)) {
@@ -89,10 +89,29 @@ const App = observer(() => {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <Box sx={{ display: "flex", gap: 1 }}>
-        {BoardStore.columns.map((column) => (
-          <Column key={column.id} column={column} />
-        ))}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 16,
+          right: 16,
+        }}
+      >
+        <Profile />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          minHeight: "100vh",
+          py: 4,
+        }}
+      >
+        <Box sx={{ display: "flex", gap: 1 }}>
+          {BoardStore.columns.map((column) => (
+            <Column key={column.id} column={column} />
+          ))}
+        </Box>
       </Box>
       <DragOverlay>
         {draggedTask && (
@@ -105,4 +124,4 @@ const App = observer(() => {
   );
 });
 
-export default App;
+export default Home;

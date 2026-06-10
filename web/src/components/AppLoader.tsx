@@ -10,7 +10,7 @@ export const AppLoader = observer(({ children }: { children: ReactNode }) => {
     authStore.refreshSession();
   }, [authStore]);
 
-  if (authStore.refreshState.loading) {
+  if (!authStore.initialized) {
     return (
       <Box
         sx={{

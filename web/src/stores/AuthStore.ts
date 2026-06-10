@@ -6,10 +6,12 @@ import { RequestState } from "./RequestState";
 export class AuthStore {
   user: User | null = null;
   accessToken: string | null = null;
+  initialized = false;
   signUpState = new RequestState();
   signInState = new RequestState();
   refreshState = new RequestState();
   meState = new RequestState();
+  logoutState = new RequestState();
 
   constructor() {
     makeAutoObservable(this);
@@ -42,8 +44,9 @@ export class AuthStore {
     });
   }
 
-  refreshSession() {
-    return this.refreshState.run(() => this.apiRefreshSession());
+  async refreshSession() {
+    await this.refreshState.run(() => this.apiRefreshSession());
+    runInAction(() => (this.initialized = true));
   }
 
   private async apiFetchUser() {
@@ -92,5 +95,22 @@ export class AuthStore {
 
   signIn(signInData: SignInRequest) {
     return this.signInState.run(() => this.apiSignIn(signInData));
+  }
+
+  private async apiLogout() {
+    const { error } = await api.POST("/auth/logout", {
+      credentials: "include",
+    });
+
+    if (error) return error;
+
+    runInAction(() => {
+      this.accessToken = null;
+      this.user = null;
+    });
+  }
+
+  logout() {
+    return this.logoutState.run(() => this.apiLogout());
   }
 }
