@@ -26,3 +26,10 @@ export const signUpFormSchema = z
   });
 
 export type SignUpFormValues = z.infer<typeof signUpFormSchema>;
+
+export const signInFormSchema = z.object({
+  email: z.string().email("Enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export type SignInFormValues = z.infer<typeof signInFormSchema>;

@@ -2,12 +2,13 @@ import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Home from "@/routes/home";
 import SignUp from "@/routes/sign-up";
-import { RootStore } from "./stores/RootStore";
-import { StoresContext } from "./stores/StoresContext";
+import SignIn from "@/routes/sign-in";
+import { RootStore } from "@/stores/RootStore";
+import { StoresContext } from "@/stores/StoresContext";
 import { ThemeProvider } from "@/theme/ThemeContext";
 import { BrowserRouter, Routes, Route } from "react-router";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { AppLoader } from "./components/AppLoader";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppLoader } from "@/components/AppLoader";
 
 // eslint-disable-next-line react-refresh/only-export-components
 function Main() {
@@ -29,6 +30,7 @@ function Main() {
                   }
                 />
                 <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/sign-in" element={<SignIn />} />
               </Routes>
             </BrowserRouter>
           </AppLoader>

@@ -28,6 +28,11 @@ export const ERRORS = {
     // shown inline on the sign-up form's email field instead
     strategy: "silent",
   },
+  INVALID_CREDENTIALS: {
+    message: "Invalid email or password",
+    // shown inline on the sign-in form instead
+    strategy: "silent",
+  },
   INTERNAL_SERVER_ERROR: {
     message: "Something went wrong on our end",
     strategy: "toast",

@@ -1,17 +1,24 @@
-import type { SignUpRequest, User } from "@/types/schema";
-import { makeAutoObservable, runInAction } from "mobx";
-import { api } from "@/services/api";
+import type { SignInRequest, SignUpRequest, User } from "@/types/schema";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
+import { api, authToken } from "@/services/api";
 import { RequestState } from "./RequestState";
 
 export class AuthStore {
   user: User | null = null;
   accessToken: string | null = null;
   signUpState = new RequestState();
+  signInState = new RequestState();
   refreshState = new RequestState();
   meState = new RequestState();
 
   constructor() {
     makeAutoObservable(this);
+
+    reaction(
+      () => this.accessToken,
+      (accessToken) => (authToken.current = accessToken),
+      { fireImmediately: true },
+    );
   }
 
   isAuthenticated() {
@@ -40,9 +47,7 @@ export class AuthStore {
   }
 
   private async apiFetchUser() {
-    const { data, error } = await api.GET("/auth/me", {
-      headers: { Authorization: `Bearer ${this.accessToken}` },
-    });
+    const { data, error } = await api.GET("/auth/me");
 
     if (error) return error;
 
@@ -69,5 +74,23 @@ export class AuthStore {
 
   signUp(signUpData: SignUpRequest) {
     return this.signUpState.run(() => this.apiSignUp(signUpData));
+  }
+
+  private async apiSignIn(signInData: SignInRequest) {
+    const { data, error } = await api.POST("/auth/sign-in", {
+      body: signInData,
+      credentials: "include",
+    });
+
+    if (error) return error;
+
+    runInAction(() => {
+      this.accessToken = data.accessToken;
+      this.user = data.user;
+    });
+  }
+
+  signIn(signInData: SignInRequest) {
+    return this.signInState.run(() => this.apiSignIn(signInData));
   }
 }

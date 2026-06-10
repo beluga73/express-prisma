@@ -44,6 +44,16 @@ export type SignUpResponse = Exclude<
   undefined
 >["content"]["application/json"];
 
+// POST /auth/sign-in
+export type SignInRequest = Exclude<
+  paths["/auth/sign-in"]["post"]["requestBody"],
+  undefined
+>["content"]["application/json"];
+export type SignInResponse = Exclude<
+  paths["/auth/sign-in"]["post"]["responses"]["200"],
+  undefined
+>["content"]["application/json"];
+
 // GET /auth/me
 export type User =
   paths["/auth/me"]["get"]["responses"]["200"]["content"]["application/json"];
