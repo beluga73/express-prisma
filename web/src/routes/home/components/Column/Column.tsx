@@ -17,9 +17,10 @@ import { observer } from "mobx-react-lite";
 
 type Props = {
   column: ColumnType;
+  "data-testid"?: string;
 };
 
-export const Column = observer(({ column }: Props) => {
+export const Column = observer(({ column, "data-testid": testId }: Props) => {
   const { ref, isDropTarget } = useDroppable({
     id: column.id,
     data: { columnId: column.id },
@@ -44,6 +45,7 @@ export const Column = observer(({ column }: Props) => {
   return (
     <Paper
       ref={ref}
+      data-testid={testId}
       sx={{
         display: "flex",
         flexDirection: "column",

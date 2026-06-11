@@ -109,7 +109,11 @@ const Home = observer(() => {
       >
         <Box sx={{ display: "flex", gap: 1 }}>
           {boardStore.columns.map((column) => (
-            <Column key={column.id} column={column} />
+            <Column
+              key={column.id}
+              column={column}
+              data-testid={`column-${column.title.toLocaleLowerCase()}`}
+            />
           ))}
         </Box>
       </Box>
